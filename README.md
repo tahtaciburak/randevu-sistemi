@@ -1,2 +1,2 @@
-# leblebin
-Leblebin main
+# Randevu Sistemi
+YTU Sistem Programlama dersi donem projesi
