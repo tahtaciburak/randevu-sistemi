@@ -1,0 +1,63 @@
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+
+<!-- Latest compiled and minified JavaScript -->
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+
+<div id="accordion">
+    <div class="card">
+      <div class="card-header" id="headingOne">
+        <h5 class="mb-0">
+          <button class="btn btn-link" data-toggle="collapse" data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            Randevu almak istediginiz kisiyi secin
+          </button>
+        </h5>
+      </div>
+  
+      <div id="collapseOne" class="collapse show" aria-labelledby="headingOne" data-parent="#accordion">
+        <div class="card-body">
+          <div class="col-sm-12">
+              <p>Randevu talep ettiginiz ogretim elemani ya da ogrencinin numarasi, adi ve soyadi ile arama yapabilirsiniz.</p>
+              <select class="selectpicker" data-live-search="true" data-width="100%">
+                  <option data-tokens="ketchup mustard">Hot Dog, Fries and a Soda</option>
+                  <option data-tokens="mustard">Burger, Shake and a Smile</option>
+                  <option data-tokens="frosting">Sugar, Spice and all things nice</option>
+              </select>
+          </div>              
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingTwo">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+            Randevu tarih ve saatini secin
+          </button>
+        </h5>
+      </div>
+      <div id="collapseTwo" class="collapse" aria-labelledby="headingTwo" data-parent="#accordion">
+        <div class="card-body">
+          <%include availables_calendar%>
+        </div>
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-header" id="headingThree">
+        <h5 class="mb-0">
+          <button class="btn btn-link collapsed" data-toggle="collapse" data-target="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+            Randevunuzu onaylayin
+          </button>
+        </h5>
+      </div>
+      <div id="collapseThree" class="collapse" aria-labelledby="headingThree" data-parent="#accordion">
+        <div class="card-body">
+          <p>Randevunuzu onaylamadan once randevu aldiginiz kisiye mesaj ve belge gonderebilirsiniz.</p>
+          <div class="form-group">
+              <label for="comment">Comment:</label>
+              <textarea class="form-control" rows="5" id="comment"></textarea>
+              <button class="btn btn-primary">Randevuyu Onayla</button>
+            </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  
