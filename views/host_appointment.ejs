@@ -1,0 +1,29 @@
+<form>
+    <div class="row ">
+        <div class="col-sm">
+            <%include availables_calendar%>
+        </div>
+        <div class="col-sm-5">
+            <div class="alert alert-danger"><b>Uyarı</b>: Randevu başlangıç tarihini yan taraftaki takvimden seçmelisiniz!</div>
+            <div class="form-group">
+                <label for="title">Randevu Başlığı</label>
+                <input type="text" class="form-control" id="title" placeholder="Örnek: 'Proje Görüşmeleri Öncelikli Randevu Aralığı'">
+            </div>
+            <div class="form-group">
+                <label for="recPattern">Tekrar Paleti:</label>
+                <select class="form-control" id="recPattern">
+                  <option>Tek Sefer</option>
+                  <option>Haftalık</option>
+                  <option>Aylık</option>
+                </select>
+              </div>
+            <div class="form-group">
+                <label for="desc">Randevu Açıklaması</label>
+                <textarea class="form-control" id="desc" rows="4" placeholder="Açıklamanızı buraya giriniz..."></textarea>
+            </div>
+            <button class="btn btn-success btn-lg btn-block">Randevu Oluştur!</button>
+        </div>
+        
+        
+    </div>
+</form>
