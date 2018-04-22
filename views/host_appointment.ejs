@@ -1,4 +1,4 @@
-<form>
+<form >
     <div class="row ">
         <div class="col-sm">
             <%include availables_calendar%>
@@ -7,19 +7,29 @@
             <div class="alert alert-danger"><b>Uyarı</b>: Randevu başlangıç tarihini yan taraftaki takvimden seçmelisiniz!</div>
             <div class="form-group">
                 <label for="title">Randevu Başlığı</label>
-                <input type="text" class="form-control" id="title" placeholder="Örnek: 'Proje Görüşmeleri Öncelikli Randevu Aralığı'">
+                <input type="text" class="form-control" id="title" name="appointment_header" placeholder="Örnek: 'Proje Görüşmeleri Öncelikli Randevu Aralığı'">
             </div>
             <div class="form-group">
                 <label for="recPattern">Tekrar Paleti:</label>
-                <select class="form-control" id="recPattern">
-                  <option>Tek Sefer</option>
-                  <option>Haftalık</option>
-                  <option>Aylık</option>
+                <select class="form-control" onchange="patternChange(this)" id="recPattern">
+                  <option value="single">Tek Sefer</option>
+                  <option value="weekly">Haftalık</option>
+                  <option value="monthly">Aylık</option>
                 </select>
               </div>
+            <div class="form-group" id="tekrar-input" style="display:none">
+                <label>Tekrar Sayısı</label>
+                <input type="number" class="form-control" onchange="checkPositive(this)" id="reccurrency" name="reccurrency" value="0"></input>
+
+            </div>
+            <div class="form-group">
+                <label for="length">Randevu Uzunluğu:(Dakika)</label>
+                <input class="form-control" type="text" id="lenght" name="lenght" placeholder="30">
+                </input>
+            </div>
             <div class="form-group">
                 <label for="desc">Randevu Açıklaması</label>
-                <textarea class="form-control" id="desc" rows="4" placeholder="Açıklamanızı buraya giriniz..."></textarea>
+                <textarea class="form-control"  id="desc" rows="4"  name="appointment_description" placeholder="Açıklamanızı buraya giriniz..."></textarea>
             </div>
             <button class="btn btn-success btn-lg btn-block">Randevu Oluştur!</button>
         </div>
@@ -27,3 +37,17 @@
         
     </div>
 </form>
+<script>
+function patternChange(select){
+    //alert(select.value);
+    if(select.value == "single"){
+        // Haftalıksa
+        document.getElementById('tekrar-input').style.display = "none";
+    }else if(select.value == "weekly" || select.value=="monthly"){
+        document.getElementById('tekrar-input').style.display = "block";
+    }
+}
+function checkPositive(sel){
+    if(sel.value<0) $('#reccurrency').val(0);
+}
+</script>
