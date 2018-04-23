@@ -13,11 +13,27 @@
         
         function fillTable(results){
             //TODO: Abi buraya jquery ile tablo doldurma ozelligi yazilacak
+            $(".item").remove()
+
+            for(var i=0;i<results.length;i++){
+                $("#appointment_list").append(
+                    '<tr class="item">'+"<td>"+results[i].AppointmentHeader+"</td>"+
+                    "<td>"+results[i].AppointmentStatus+"</td>"+
+                    "<td>"+results[i].GuestID+"</td>"+
+                    "<td>"+results[i].StartDateTime+"</td>"+
+                    "<td>"+results[i].StartDateTime+"</td>"+
+                    "<td>"+results[i].Location+"</td>"+
+                    '<td><button class="btn btn-info">Bilgi</button><button class="btn btn-danger";>İptal</button></td>'+
+                    "</tr>"
+
+                )
+            }
         }
     }
 </script>
+<legend style="padding-top:20px;">Randevularınızı görüntülemek için lütfen yenile butonuna basın</legend>
 <button class="btn btn-block btn-success" id="yenile" onclick="getDatasFromServer()">Yenile</button>
-<table class="table table-striped">
+<table id="my_appointments" class="table table-striped">
     <thead>
         <tr>
         <th>Randevu Başlığı</th>
@@ -29,19 +45,7 @@
         <th>İşlemler</th>
         </tr>
     </thead>
-    <tbody>
-        <tr>
-        <td>asdasdasd</td>
-        <td>Alındı</td>
-        <td>john@example.com</td>
-        <td>Alındı</td>
-        <td>john@example.com</td>
-        <td>john@example.com</td>
-        <td>
-            <button class="btn btn-info">Bilgi</button>
-            <button class="btn btn-danger">İptal</button>
-        </td>
-        </tr>
-        
+    <tbody id="appointment_list">
+
     </tbody>
 </table>
