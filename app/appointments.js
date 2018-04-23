@@ -11,6 +11,19 @@ router.get("/",isLoggedIn,function (req,res) {
 
 })
 //get appointment by appointment id
+router.get('/my/host/',isLoggedIn,function (req,res) {
+	var host_id = req.user.id
+
+	db.query("SELECT * FROM Appointments WHERE HostId=?",[host_id],function (err,result) { 
+		if(err){
+            console.log(err)            
+        }        
+
+        res.json(result)
+		//burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
+	})
+})
+
 router.get('/host/:host_id',isLoggedIn,function (req,res) {
 	var host_id = req.params.host_id
 
@@ -24,10 +37,32 @@ router.get('/host/:host_id',isLoggedIn,function (req,res) {
 	})
 })
 
+router.get('/my/guest/',isLoggedIn,function (req,res) {
+	var guest_id = req.user.id;
+
+	db.query("SELECT * FROM Appointments WHERE GuestId=?",[guest_id],function (err,result) { 
+		if(err)
+			return err
+        //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
+        res.json(result)
+	})
+})
+
 router.get('/guest/:guest_id',isLoggedIn,function (req,res) {
 	var guest_id = req.params.guest_id;
 
 	db.query("SELECT * FROM Appointments WHERE GuestId=?",[guest_id],function (err,result) { 
+		if(err)
+			return err
+        //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
+        res.json(result)
+	})
+})
+
+router.get('/my/all/',isLoggedIn,function (req,res) {
+	var user_id = req.user.id;
+
+	db.query("SELECT * FROM Appointments WHERE GuestId=? OR HostId=?",[user_id,user_id],function (err,result) { 
 		if(err)
 			return err
         //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
@@ -49,10 +84,20 @@ router.get('/all/:user_id',isLoggedIn,function (req,res) {
 
 
 router.post("/new",isLoggedIn,function (req,res) {
-    var host_id = req.body.host_id
+    var host_id = req.user.id
     var appointment_header = req.body.appointment_header
     var appointment_description = req.body.appointment_description
-    var length = req.body.length
+    var length = req.body.length //dakika cinsinden
+    var start_date = req.body.start_date
+    var period = req.body.period
+
+    if(period=="single"){
+
+    }else if(period=="weekly"){
+
+    }else if(period=="monthly"){
+
+    }
 
 	db.query("INSERT INTO Appointments (owner_id,name,description,created_at,image_url) VALUES(?,?,?,NOW(),?)",[owner_id,channel_name,channel_description,image_url],function (err,result) {
 		if (err) {
@@ -112,60 +157,6 @@ router.get("/delete",isLoggedIn,function (req,res) {
 
 })
 
-router.get("/:channel_id/new_component",isLoggedIn,function (req,res) {
-	var channel_id = req.params.channel_id
-	res.render("create_component.ejs",{
-		channel_id : channel_id
-	})
-})
-
-router.post("/:channel_id/new_component",isLoggedIn,function (req,res) {
-	var channel_id = req.params.channel_id
-	var component_name = req.body.name
-	var type = req.body.type
-
-	utilities.createComponent(
-		{
-			channel_id: req.params.channel_id,
-			name: req.body.name,
-			type: req.body.type
-		},
-		function (err, id) {
-			if(err)
-				return utilities.printError(res, err)
-
-			res.redirect("/channels/" + channel_id)
-		}
-	)
-})
-
-router.get("/components/:component_id",function (req,res) {
-	var component_id = req.params.component_id
-	var limit = req.query.limit
-	mimit = parseInt(limit)
-
-	if (limit)
-	{
-		utilities.getLimitedComponentData(component_id,mimit,function(err,result)
-		{
-			if (err){
-				return utilities.printError(res,err)
-			}
-			res.json(result.map(function(t){return t.value;}));
-		})
-	}
-	else
-	{
-		utilities.getComponentData(component_id, function(err, result)
-		{
-			if(err)
-				return utilities.printError(res, err)
-	
-			res.json(result.map(function(t){return t.value;}));
-			//res.json({data: result})
-		})
-	}
-})
 
 router.get("/components/delete/:component_id",isLoggedIn,function (req,res) {
 	var component_id = req.params.component_id

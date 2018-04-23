@@ -1,4 +1,22 @@
-
+<script>
+    var all_results;
+    function getDatasFromServer(){
+        $.ajax(
+            {
+                url:"/appointments/my/all/",
+                success: function(result){
+                    all_results = result
+                    fillTable(all_results)
+                }
+            }
+        )
+        
+        function fillTable(results){
+            //TODO: Abi buraya jquery ile tablo doldurma ozelligi yazilacak
+        }
+    }
+</script>
+<button class="btn btn-block btn-success" id="yenile" onclick="getDatasFromServer()">Yenile</button>
 <table class="table table-striped">
     <thead>
         <tr>
