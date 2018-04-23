@@ -81,38 +81,43 @@ router.get('/all/:user_id',isLoggedIn,function (req,res) {
 	})
 })
 
-router.post("/new",isLoggedIn,function (req,res) {
-    var host_id = req.user.id
+router.post("/new",isLoggedIn,function (req,res) {	
+	var host_id = req.user.id
     var appointment_header = req.body.appointment_header
     var appointment_description = req.body.appointment_description
     var length = req.body.length //dakika cinsinden
 	var start_date = req.body.start_date
 	var start_time = req.body.start_time
+	var reccurrency = req.body.reccurrency	
+	var rec_pattern = req.body.rec_pattern
 
-    var period = req.body.period
-
-    if(period=="single"){
+    if(rec_pattern=="single"){
+		//TODO ek bilgiler veritabanina kaydedilmeli burada sadece temel olanlari ekledim ama tum verilerin eklenmesi lazim
+		//Mesela baslangic tarih ve zamanini eklemedim
+		//TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
 		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length) VALUES(?,?,?,?)",[host_id,appointment_header,appointment_description,length],function (err,result) {
 			if (err) {
-				res.json({code:400,message:"DB_ERROR"})
+				res.json({code:400,message:err})
 			}else{
-				res.redirect("/")
+				res.redirect("/profile")
 			}
 		})
-    }else if(period=="weekly"){
+    }else if(rec_pattern=="weekly"){
+		//TODO momentjs ile gun gun ekleme yapilabilir bence bu kismi yaparken momentjs i derinlemesine arastir
+		for(var i=0;i<reccurrency;i++){
 
-    }else if(period=="monthly"){
+		}
+    }else if(rec_pattern=="monthly"){
+		//TODO momentjs ile gun gun ekleme yapilabilir bence bu kismi yaparken momentjs i derinlemesine arastir
+		for(var i=0;i<reccurrency;i++){
 
-    }
+		}
+	}
 })
 
 function isLoggedIn(req, res, next) {
-
-	// if user is authenticated in the session, carry on
 	if (req.isAuthenticated())
 		return next();
-
-	// if they aren't redirect them to the home page
 	res.redirect('/');
 }
 
