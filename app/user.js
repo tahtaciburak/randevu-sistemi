@@ -21,6 +21,12 @@ router.get("/give",function (req,res) {
     })
 
 })
+router.get("/calendar",function (req,res) {
+    res.render("user_calendar.ejs",{
+        user : getSecureUserInfo(req.user)
+    })
+
+})
 
 function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
