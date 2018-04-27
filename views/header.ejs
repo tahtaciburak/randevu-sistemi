@@ -19,32 +19,59 @@
 	integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
 	crossorigin="anonymous"></script>
 </head>
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-		<div class="container">
-			<a class="navbar-brand" href="/">Takvim.io</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav mr-auto">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark">
+<div class="container">
+		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
+					<ul class="navbar-nav mr-auto">
+						
+							<li class="nav-item">
+									<a class="nav-link" href="/ozellikler">Özellikler</a>
+							</li>
+							<% if (user){ %>
+								<li class="nav-item">
+									<a class="nav-link" href="/profile">Randevularım</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="/profile">Randevu al</a>
+								</li>
+								<li class="nav-item">
+									<a class="nav-link" href="/profile">Randevu ver</a>
+								</li>
+							
+							<% } %>
 
-				<li class="nav-item">
-					<a class="nav-link" href="#">Özellikler</a>
-				</li>
 
-					
-					<% if (user){ %>
-						<li class="nav-item">
-							<a class="nav-link" href="/profile">Hoşgeldiniz, <%= user.username %></a>
-						</li>
+
+							</li>
+					</ul>
+			</div>
+			<div class="mx-auto order-0">
+					<a class="navbar-brand mx-auto" href="/">
+							Takvim.io
+					</a>
+			</div>
+			<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
+					<ul class="navbar-nav mr-auto"  style="float: right;">
+					<% if (user) {%>
+							<li class="nav-item" >
+									<div class="dropdown">
+											<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+													Merhaba <b><%= user.username %>!</b>
+											</button>
+											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+												<a class="dropdown-item" href="/profile">Profilim</a>
+												<a class="dropdown-item" href="/logout">Çıkış yap</a>
+											</div>
+										</div>
+							</li>
 					<% } else {%>
-						<li class="nav-item">
-							<a class="nav-link" href="/login">Giriş Yap</a>
-						</li>
-					<% } %>
-					
-				
-				</ul>
+							<li class="nav-item "  >
+								<a class="nav-link" href="/login">Giriş Yap</a>
+							</li>
+						<% } %>
+					</ul>
 			</div>
 		</div>
 </nav>
+
+
