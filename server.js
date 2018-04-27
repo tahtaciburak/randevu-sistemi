@@ -13,7 +13,7 @@ var path	 = require('path')
 
 var passport = require('passport');
 var flash    = require('connect-flash');
-
+var user 	= require('./app/user');
 // configuration ===============================================================
 // connect to our database
 
@@ -41,7 +41,9 @@ app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(express.static(path.join(__dirname, 'public')));
-app.use("/appointments/",require("./app/appointments.js"))
+app.use("/appointments/",require("./app/appointments.js"));
+
+app.use("/user",isLoggedIn,user);
 //app.use("/api/",require("./app/api.js"))
 
 
@@ -52,3 +54,9 @@ require('./app/routes.js')(app, passport); // load our routes and pass in our ap
 // launch ======================================================================
 app.listen(port);
 console.log('The magic happens on port ' + port);
+
+function isLoggedIn(req, res, next) {
+	if (req.isAuthenticated())
+		return next();
+	res.redirect('/');
+}

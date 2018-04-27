@@ -14,6 +14,7 @@
 	<script src='lib/moment.min.js'></script>
 	<script src='lib/jquery.min.js'></script>
 	<script src='fullcalendar.min.js'></script>
+	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
 	<script
 	src="https://code.jquery.com/jquery-3.3.1.js"
 	integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
@@ -24,20 +25,38 @@
 		<div class="navbar-collapse collapse w-100 order-1 order-md-0 dual-collapse2">
 					<ul class="navbar-nav mr-auto">
 						
-							<li class="nav-item">
-									<a class="nav-link" href="/ozellikler">Özellikler</a>
-							</li>
-							<% if (user){ %>
-								<li class="nav-item">
-									<a class="nav-link" href="/profile">Randevularım</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="/profile">Randevu al</a>
-								</li>
-								<li class="nav-item">
-									<a class="nav-link" href="/profile">Randevu ver</a>
-								</li>
 							
+							<% if (user){ %>
+
+
+
+								<li class="nav-item">
+										<div class="dropdown">
+												<button class="btn btn-success dropdown-toggle" type="button" id="dropdownForAppointment" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+														<span class="fas fa-calendar-alt"></span> Randevu İşlemleri
+												</button>
+												<div class="dropdown-menu" aria-labelledby="dropdownForAppointment">
+														<a class="dropdown-item" href="/user">
+															<span class="fas fa-child "></span> Başlangıç
+														</a>
+														<a class="dropdown-item" href="/user/calendar">
+															<span class="fas fa-calendar-check"></span> Randevularım
+														</a>
+														<a class="dropdown-item" href="/user/take">
+															<span class="fas fa-calendar-plus"></span> Randevu al
+														</a>
+														<a class="dropdown-item" href="/user/give">
+															<span class="fas fa-bullhorn "></span> Randevu ver
+														</a>
+												</div>
+											</div>
+									
+
+							
+							<% }else { %>
+								<li class="nav-item">
+										<a class="nav-link" href="/ozellikler">Özellikler</a>
+								</li>
 							<% } %>
 
 
@@ -47,7 +66,7 @@
 			</div>
 			<div class="mx-auto order-0">
 					<a class="navbar-brand mx-auto" href="/">
-							Takvim.io
+							<b>Takvim.io</b>
 					</a>
 			</div>
 			<div class="navbar-collapse collapse w-100 order-3 dual-collapse2">
@@ -56,11 +75,15 @@
 							<li class="nav-item" >
 									<div class="dropdown">
 											<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-													Merhaba <b><%= user.username %>!</b>
+													<span class="fas fa-user-circle "></span> <b><%= user.username %>!</b>
 											</button>
 											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-												<a class="dropdown-item" href="/profile">Profilim</a>
-												<a class="dropdown-item" href="/logout">Çıkış yap</a>
+												<a class="dropdown-item" href="/profile">
+													<span class="fas fa-user"></span> Profilim
+												</a>
+												<a class="dropdown-item" href="/logout">
+													<span class="fas fa-sign-out-alt"></span> Çıkış yap
+												</a>
 											</div>
 										</div>
 							</li>
