@@ -9,6 +9,18 @@ router.get("/",function (req,res) {
     })
 
 })
+router.get("/take",function (req,res) {
+    res.render("user_take.ejs",{
+        user : getSecureUserInfo(req.user)
+    })
+
+})
+router.get("/give",function (req,res) {
+    res.render("user_give.ejs",{
+        user : getSecureUserInfo(req.user)
+    })
+
+})
 
 function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
