@@ -1,11 +1,11 @@
 # Randevu Sistemi
-![alt text](https://i.hizliresim.com/NZPjnQ.png)
+![Screenshot](scrsht.png)
 YTU Sistem Programlama dersi donem projesi
 
 
 
 
 ## Contributors
-@hibestil
-@btahtaci
-@erkankarabulut
+    - @btahtaci
+    - @erkankarabulut
+    - @hibestil
