@@ -5,7 +5,9 @@ module.exports = function(app, passport) {
 	// HOME PAGE (with login links) ========
 	// =====================================
 	app.get('/', function(req, res) {
-		res.render('index.ejs'); // load the index.ejs file
+		res.render('index.ejs',{
+			user :  getSecureUserInfo(req.user)
+		}); // load the index.ejs file
 	});
 
 	// =====================================
@@ -15,14 +17,17 @@ module.exports = function(app, passport) {
 	app.get('/login', function(req, res) {
 
 		// render the page and pass in any flash data if it exists
-		res.render('login.ejs', { message: req.flash('loginMessage') });
+		res.render('login.ejs', { 
+			message: req.flash('loginMessage'),
+			user :  getSecureUserInfo(req.user)
+		});
 	});
 
 	// process the login form
 	app.post('/login', passport.authenticate('local-login', {
             successRedirect : '/profile', // redirect to the secure profile section
             failureRedirect : '/login', // redirect back to the signup page if there is an error
-            failureFlash : true // allow flash messages
+			failureFlash : true // allow flash messages
 		}),
         function(req, res) {
             console.log("hello");
@@ -41,7 +46,10 @@ module.exports = function(app, passport) {
 	// show the signup form
 	app.get('/signup', function(req, res) {
 		// render the page and pass in any flash data if it exists
-		res.render('signup.ejs', { message: req.flash('signupMessage') });
+		res.render('signup.ejs', { 
+			message: req.flash('signupMessage'),
+			user :  getSecureUserInfo(req.user)
+		 });
 	});
 
 	// process the signup form
@@ -80,4 +88,9 @@ function isLoggedIn(req, res, next) {
 
 	// if they aren't redirect them to the home page
 	res.redirect('/');
+}
+// Delete user password from user object
+function getSecureUserInfo(user){
+	if (user)  delete user.Password;
+    return user;
 }
