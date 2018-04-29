@@ -1,5 +1,8 @@
 // app/routes.js
+var user 	= require('./user');
 module.exports = function(app, passport) {
+
+	app.use("/user",isLoggedIn,user);
 
 	// =====================================
 	// HOME PAGE (with login links) ========
@@ -9,7 +12,7 @@ module.exports = function(app, passport) {
 			user :  getSecureUserInfo(req.user)
 		}); // load the index.ejs file
 	});
-
+	
 	// =====================================
 	// LOGIN ===============================
 	// =====================================

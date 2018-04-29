@@ -13,7 +13,7 @@ var path	 = require('path')
 
 var passport = require('passport');
 var flash    = require('connect-flash');
-var user 	= require('./app/user');
+
 // configuration ===============================================================
 // connect to our database
 
@@ -43,7 +43,7 @@ app.use(flash()); // use connect-flash for flash messages stored in session
 app.use(express.static(__dirname + '/public'));
 app.use("/appointments/",require("./app/appointments.js"));
 
-app.use("/user",isLoggedIn,user);
+
 //app.use("/api/",require("./app/api.js"))
 
 
