@@ -1,7 +1,6 @@
 <head>
 	<title>Takvim.io</title>
 	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
-	<link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.0.0/css/font-awesome.min.css">
 	<meta charset="utf-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
@@ -15,10 +14,7 @@
 	<script src='/lib/jquery.min.js'></script>
 	<script src='/fullcalendar.min.js'></script>
 	<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.10/css/all.css" integrity="sha384-+d0P83n9kaQMCwj8F4RJB66tzIwOKmrdb46+porD/OvrJ+37WqIM7UoBtwHO6Nlg" crossorigin="anonymous">
-	<script
-	src="https://code.jquery.com/jquery-3.3.1.js"
-	integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
-	crossorigin="anonymous"></script>
+
 </head>
 <nav class="navbar navbar-expand-md navbar-dark bg-dark">
 <div class="container">
@@ -32,9 +28,9 @@
 
 								<li class="nav-item">
 										<div class="dropdown">
-												<button class="btn btn-success dropdown-toggle" type="button" id="dropdownForAppointment" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+												<a class="nav-link dropdown-toggle" style="cursor:pointer" type="button" id="dropdownForAppointment" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 														<span class="fas fa-calendar-alt"></span> Randevu İşlemleri
-												</button>
+												</a>
 												<div class="dropdown-menu" aria-labelledby="dropdownForAppointment">
 														<a class="dropdown-item" href="/user">
 															<span class="fas fa-child "></span> Başlangıç
@@ -74,9 +70,9 @@
 					<% if (user) {%>
 							<li class="nav-item" >
 									<div class="dropdown">
-											<button class="btn btn-info dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+											<a class="nav-link dropdown-toggle" style="cursor:pointer;" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
 													<span class="fas fa-user-circle "></span> <b><%= user.username %>!</b>
-											</button>
+											</a>
 											<div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
 												<a class="dropdown-item" href="/profile">
 													<span class="fas fa-user"></span> Profilim
