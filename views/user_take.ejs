@@ -4,8 +4,64 @@
 <% include ./header %>
 <body >
     <div class="container">
-        <h3 class="alert alert-info">Randevu al</h3>
-        Randevu alma işlemleri bu ekranda gerçekleşecek
+        
+        <h3><b>Randevu al</b></h3>
+        
+        <div>
+            <form>
+                <div class="form-row align-items-center">
+                  <div class="col-sm">
+                    <label class="sr-only" for="inlineFormInputName">Kişi, Kurum ve Etiketlerde Arayın...</label>
+                    <input type="text" class="form-control" id="inlineFormInputName" placeholder="Kişi, Kurum ve Etiketlerde Arayın...">
+                  </div>
+                  
+                  <div class="col-auto my-1">
+                    <button type="submit" class="btn btn-primary"><span class="fas fa-search"></span> Ara</button>
+                  </div>
+                </div>
+              </form>
+              
+        </div>
+
+        <!-- Bulunan sonuçlar -->
+        
+        
+        <div class="alert alert-warning" style="margin:15px 0;"><b>"yıldız"</b> için bulunan sonuçlar :</div>
+        
+        <table class="table table-borderless">
+            <thead>
+              <tr> 
+                <th scope="col"><span class="fas fa-address-book"></span> Ad Soyad</th>
+                <th scope="col"><span class="fas fa-tag"></span> Etiketler</th>
+                <th scope="col"><span class="fas fa-building"></span> Kurum</th>
+                <th scope="col"><span class="fas fa-user"></span> Kullancı Adı</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+
+                <td>Ahmet Tevfik İnan</td>
+                <td>Yıldız,Sistem Programlama,Bilgisayar Mühendisliği</td>
+                <td>Yıldız Teknik Üniversitesi</td>
+                <td>@ahmettevfik</td>
+              </tr>
+              <tr>
+
+                <td>Ziya Cihan Tayşi</td>
+                <td>Yıldız,Mobil,Bilgisayar Mühendisliği</td>
+                <td>Yıldız Teknik Üniversitesi</td>
+                <td>@ziya</td>
+              </tr>
+              <tr>
+
+                <td>Umut Yıldız</td>
+                <td>Girişimcilik,TTO,Startup,Mentor </td>
+                <td>ITU Teknopark TTO</td>
+                <td>@umut111</td>
+              </tr>
+              
+            </tbody>
+          </table>
     </div>
 
     
