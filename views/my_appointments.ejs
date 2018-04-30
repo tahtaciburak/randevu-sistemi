@@ -1,5 +1,9 @@
 <script>
     var all_results;
+    $(document).ready(function(){
+        getDatasFromServer();
+    })
+
     function getDatasFromServer(){
         $.ajax(
             {
@@ -31,8 +35,6 @@
         }
     }
 </script>
-<legend style="padding-top:20px;">Randevularınızı görüntülemek için lütfen yenile butonuna basın</legend>
-<button class="btn btn-block btn-success" id="yenile" onclick="getDatasFromServer()">Yenile</button>
 <table id="my_appointments" class="table table-striped">
     <thead>
         <tr>
@@ -46,6 +48,6 @@
         </tr>
     </thead>
     <tbody id="appointment_list">
-
     </tbody>
 </table>
+<button class="btn btn-block btn-success" id="yenile" onclick="getDatasFromServer()">Yenile</button>
