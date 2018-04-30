@@ -1,3 +1,4 @@
+
 var express = require("express")
 var router = express.Router()
 var db = require("../config/db.js")
@@ -81,21 +82,22 @@ router.get('/all/:user_id',isLoggedIn,function (req,res) {
 	})
 })
 
-router.post("/new",isLoggedIn,function (req,res) {	
+router.post("/new",function (req,res) {	
 	var host_id = req.user.id
     var appointment_header = req.body.appointment_header
     var appointment_description = req.body.appointment_description
     var length = req.body.length //dakika cinsinden
 	var start_date = req.body.start_date
 	var start_time = req.body.start_time
-	var reccurrency = req.body.reccurrency	
+	var reccurrency = req.body.reccurrency
+	var location = req.body.location	
 	var rec_pattern = req.body.rec_pattern
 
+	console.log(start_date+start_time)
+
     if(rec_pattern=="single"){
-		//TODO ek bilgiler veritabanina kaydedilmeli burada sadece temel olanlari ekledim ama tum verilerin eklenmesi lazim
-		//Mesela baslangic tarih ve zamanini eklemedim
 		//TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
-		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length) VALUES(?,?,?,?)",[host_id,appointment_header,appointment_description,length],function (err,result) {
+		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime) VALUES(?,?,?,?,?,?)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
 			if (err) {
 				res.json({code:400,message:err})
 			}else{
