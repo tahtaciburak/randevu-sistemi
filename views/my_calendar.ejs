@@ -1,31 +1,40 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset='utf-8' />
-<link href='/fullcalendar.min.css' rel='stylesheet' />
-<link href='/fullcalendar.print.min.css' rel='stylesheet' media='print' />
-<script src='/lib/moment.min.js'></script>
-<script src='/lib/jquery.min.js'></script>
-<script src='/fullcalendar.min.js'></script>
-<script>
-
-  $(document).ready(function() {
-
-    $('#calendar').fullCalendar({
-      header: {
-        left: 'prev,next today',
-        center: 'title',
-        right: 'month,basicWeek,basicDay'
-      },
-      defaultDate: '2018-03-12',
-      navLinks: true, // can click day/week names to navigate views
-      editable: true,
-      eventLimit: true, // allow "more" link when too many events
-      events: [
+  <meta charset='utf-8' />
+  <link href='/fullcalendar.min.css' rel='stylesheet' />
+  <link href='/fullcalendar.print.min.css' rel='stylesheet' media='print' />
+  <script src='/lib/moment.min.js'></script>
+  <script src='/lib/jquery.min.js'></script>
+  <script src='/fullcalendar.min.js'></script>
+  <script src='/locale-all.js'></script>
+  
+  <script>
+    
+    $(document).ready(function() {
+      var takvimObjesi =       {
+        header: {
+          left: 'prev,next today',
+          center: 'title',
+          right: 'month,basicWeek,basicDay'
+        },
+        locale:'TR',
+        themeSystem:'bootstrap3',
+        selectable:'true',
+        /*
+        dayClick:function(date){
+          alert('clicked on: '+date.format())
+        },*/
+        defaultDate: '2018-03-12',
+        navLinks: true, // can click day/week names to navigate views
+        editable: true,
+        eventLimit: true, // allow "more" link when too many events
+        events: [
         {
           title: 'All Day Event',
-          start: '2018-03-01'
-        },
+          start: '2018-03-01',
+          selectable:true
+        }/*,
         {
           title: 'Long Event',
           start: '2018-03-07',
@@ -65,7 +74,8 @@
         },
         {
           title: 'Dinner',
-          start: '2018-03-12T20:00:00'
+          start: '2018-03-12T20:00:00',
+          color: 'purple'
         },
         {
           title: 'Birthday Party',
@@ -74,33 +84,45 @@
         {
           title: 'Click for Google',
           url: 'http://google.com/',
-          start: '2018-03-28'
-        }
-      ]
+          start: '2018-03-28',
+          color: 'purple'
+        }*/
+        ],
+        
+        eventColor: '#378006',
+        eventTextColor: 'white'
+      }
+
+      takvimObjesi.events.push(
+        {
+          title: 'Meeting',
+          start: '2018-03-12T14:30:00'
+        });
+
+      $('#calendar').fullCalendar(takvimObjesi);
+
     });
-
-  });
-
-</script>
-<style>
-
-  body {
-    margin: 40px 10px;
-    padding: 0;
-    font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
-    font-size: 14px;
-  }
-
-  #calendar {
-    max-width: 900px;
-    margin: 0 auto;
-  }
-
-</style>
+    
+  </script>
+  <style>
+    
+    body {
+      margin: 40px 10px;
+      padding: 0;
+      font-family: "Lucida Grande",Helvetica,Arial,Verdana,sans-serif;
+      font-size: 14px;
+    }
+    
+    #calendar {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    
+  </style>
 </head>
 <body>
-
+  
   <div id='calendar'></div>
-
+  
 </body>
 </html>

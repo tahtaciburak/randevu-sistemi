@@ -21,7 +21,6 @@ router.get('/my/host/',isLoggedIn,function (req,res) {
         }        
 
         res.json(result)
-		//burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
 	})
 })
 
@@ -34,7 +33,6 @@ router.get('/host/:host_id',isLoggedIn,function (req,res) {
         }        
 
         res.json(result)
-		//burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
 	})
 })
 
@@ -44,8 +42,8 @@ router.get('/my/guest/',isLoggedIn,function (req,res) {
 	db.query("SELECT * FROM Appointments WHERE GuestId=?",[guest_id],function (err,result) { 
 		if(err)
 			return err
-        //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
-        res.json(result)
+
+		res.json(result)
 	})
 })
 
@@ -101,7 +99,7 @@ router.post("/new",function (req,res) {
 			if (err) {
 				res.json({code:400,message:err})
 			}else{
-				res.redirect("/profile")
+				res.redirect("/user")
 			}
 		})
     }else if(rec_pattern=="weekly"){
