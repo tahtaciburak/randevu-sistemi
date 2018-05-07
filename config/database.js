@@ -5,6 +5,7 @@ module.exports = {
         'user': 'root',
         'password': '123'
    },
+
 	'database': 'calendar',
     'users_table': 'users'
 };

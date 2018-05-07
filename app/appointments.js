@@ -85,8 +85,6 @@ router.post("/take", function (req, res) {
   var appointment_date = req.body.StartDateTime
   var giver_id = req.body.HostID
 
-  console.log(giver_id, taker_id, appointment_date);
-
   db.query("select case when (select count(*) from Appointments where HostID = ? and StartDateTime = ? and AppointmentStatus = 1) = 0 then 0 else 1 end as count", [giver_id, appointment_date], function(err,result) {
     if(result != null){
 
@@ -107,6 +105,17 @@ router.post("/take", function (req, res) {
     }else{
       console.log(err)
     }
+  })
+})
+
+router.post("/search", function(req,res){
+  var end_date = req.body.EndDateTime
+  var start_date = req.body.StartDateTime
+  var host_id = req.body.HostID
+  var counter = 0;
+
+  db.query("select * from Appointments where HostID = ? and StartDateTime between ? and ? ", [host_id, start_date, end_date], function(err,result) {
+        res.send(result)
   })
 })
 
