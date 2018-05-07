@@ -6,7 +6,7 @@ var crypto = require("crypto")
 
 router.get("/",isLoggedIn,function (req,res) {
     res.render("create_channel.ejs")
-    
+
     //Returns all appointments
     //yani burada res.render degil res.json olacak.
 
@@ -15,10 +15,10 @@ router.get("/",isLoggedIn,function (req,res) {
 router.get('/my/host/',isLoggedIn,function (req,res) {
 	var host_id = req.user.id
 
-	db.query("SELECT * FROM Appointments WHERE HostId=?",[host_id],function (err,result) { 
+	db.query("SELECT * FROM Appointments WHERE HostId=?",[host_id],function (err,result) {
 		if(err){
-            console.log(err)            
-        }        
+            console.log(err)
+        }
 
         res.json(result)
 	})
@@ -27,10 +27,10 @@ router.get('/my/host/',isLoggedIn,function (req,res) {
 router.get('/host/:host_id',isLoggedIn,function (req,res) {
 	var host_id = req.params.host_id
 
-	db.query("SELECT * FROM Appointments WHERE HostId=?",[host_id],function (err,result) { 
+	db.query("SELECT * FROM Appointments WHERE HostId=?",[host_id],function (err,result) {
 		if(err){
-            console.log(err)            
-        }        
+            console.log(err)
+        }
 
         res.json(result)
 	})
@@ -39,7 +39,7 @@ router.get('/host/:host_id',isLoggedIn,function (req,res) {
 router.get('/my/guest/',isLoggedIn,function (req,res) {
 	var guest_id = req.user.id;
 
-	db.query("SELECT * FROM Appointments WHERE GuestId=?",[guest_id],function (err,result) { 
+	db.query("SELECT * FROM Appointments WHERE GuestId=?",[guest_id],function (err,result) {
 		if(err)
 			return err
 
@@ -50,7 +50,7 @@ router.get('/my/guest/',isLoggedIn,function (req,res) {
 router.get('/guest/:guest_id',isLoggedIn,function (req,res) {
 	var guest_id = req.params.guest_id;
 
-	db.query("SELECT * FROM Appointments WHERE GuestId=?",[guest_id],function (err,result) { 
+	db.query("SELECT * FROM Appointments WHERE GuestId=?",[guest_id],function (err,result) {
 		if(err)
 			return err
         //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
@@ -61,7 +61,7 @@ router.get('/guest/:guest_id',isLoggedIn,function (req,res) {
 router.get('/my/all/',isLoggedIn,function (req,res) {
 	var user_id = req.user.id;
 
-	db.query("SELECT * FROM Appointments WHERE GuestId=? OR HostId=?",[user_id,user_id],function (err,result) { 
+	db.query("SELECT * FROM Appointments WHERE GuestId=? OR HostId=?",[user_id,user_id],function (err,result) {
 		if(err)
 			return err
         //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
@@ -72,7 +72,7 @@ router.get('/my/all/',isLoggedIn,function (req,res) {
 router.get('/all/:user_id',isLoggedIn,function (req,res) {
 	var user_id = req.params.user_id;
 
-	db.query("SELECT * FROM Appointments WHERE GuestId=? OR HostId=?",[user_id,user_id],function (err,result) { 
+	db.query("SELECT * FROM Appointments WHERE GuestId=? OR HostId=?",[user_id,user_id],function (err,result) {
 		if(err)
 			return err
         //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak
@@ -80,7 +80,29 @@ router.get('/all/:user_id',isLoggedIn,function (req,res) {
 	})
 })
 
-router.post("/new",function (req,res) {	
+router.post("/take", function (req, res) {
+  var taker_id = req.body.id
+  var appointment_date = req.body.start_time
+  var giver_id = req.body.lecturerid
+  db.query("select case when (select count(*) from Appointments where giverID = ? and startDate = ? and status = 1) = 0 then 0 else 1 end as count", [giver_id, appointment_date], function(err,result) {
+    if(result != null){
+
+      if(result[0].count == 1){
+        db.query("update Appointments set status = 2 where giverID = ? and startDate = ?", [giver_id, appointment_date], function(err,result) {
+          console.log("Giver ID: " + giver_id + " Taker ID: " + taker_id + " Datetime: " + appointment_date);
+          res.json({code:200})
+        })
+      }else {
+        res.send({code:201})
+        return err
+      }
+    }else{
+      console.log(err)
+    }
+  })
+})
+
+router.post("/new",function (req,res) {
 	var host_id = req.user.id
     var appointment_header = req.body.appointment_header
     var appointment_description = req.body.appointment_description
@@ -88,7 +110,7 @@ router.post("/new",function (req,res) {
 	var start_date = req.body.start_date
 	var start_time = req.body.start_time
 	var reccurrency = req.body.reccurrency
-	var location = req.body.location	
+	var location = req.body.location
 	var rec_pattern = req.body.rec_pattern
 
 	console.log(start_date+start_time)
