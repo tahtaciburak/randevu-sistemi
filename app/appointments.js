@@ -114,7 +114,7 @@ router.post("/search", function(req,res){
   var host_id = req.body.HostID
   var counter = 0;
 
-  db.query("select AppointmentStatus, StartDateTime, Length from Appointments where HostID = ? and StartDateTime between ? and ? ", [host_id, start_date, end_date], function(err,result) {
+  db.query("select * from Appointments where HostID = ? and StartDateTime between ? and ? ", [host_id, start_date, end_date], function(err,result) {
         res.send(result)
   })
 })
