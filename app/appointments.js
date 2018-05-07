@@ -113,10 +113,14 @@ router.post("/search", function(req,res){
   var start_date = req.body.StartDateTime
   var host_id = req.body.HostID
   var counter = 0;
-
-  db.query("select * from Appointments where HostID = ? and StartDateTime between ? and ? ", [host_id, start_date, end_date], function(err,result) {
-        res.send(result)
-  })
+	if(end_date && start_date)
+		db.query("select * from Appointments where HostID = ? and StartDateTime between ? and ? ", [host_id, start_date, end_date], function(err,result) {
+					res.send(result)
+		})
+	else
+		db.query("select * from Appointments where HostID = ? ", [host_id], function(err,result) {
+			res.send(result)
+	})
 })
 
 router.post("/new",function (req,res) {
