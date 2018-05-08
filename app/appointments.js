@@ -108,18 +108,11 @@ router.post("/take", function (req, res) {
   })
 })
 
-router.post("/search", function(req,res){
-  var end_date = req.body.EndDateTime
-  var start_date = req.body.StartDateTime
-  var host_id = req.body.HostID
-  var counter = 0;
-	if(end_date && start_date)
-		db.query("select * from Appointments where HostID = ? and StartDateTime between ? and ? ", [host_id, start_date, end_date], function(err,result) {
-					res.send(result)
-		})
-	else
-		db.query("select * from Appointments where HostID = ? ", [host_id], function(err,result) {
-			res.send(result)
+router.get("/search/:query", function(req,res){
+	var query = req.params.query
+	db.query("select * from Appointments,users where HostID = id and username LIKE CONCAT('%',?, '%') ", [query], function(err,result) {
+			if(err) throw err;
+			res.status(200).send(result);
 	})
 })
 
@@ -138,7 +131,7 @@ router.post("/new",function (req,res) {
 
     if(rec_pattern=="single"){
 		//TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
-		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime) VALUES(?,?,?,?,?,?)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
+		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,0)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
 			if (err) {
 				res.json({code:400,message:err})
 			}else{
