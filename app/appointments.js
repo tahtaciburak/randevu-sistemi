@@ -128,7 +128,7 @@ router.post("/new",function (req,res) {
 
     if(rec_pattern=="single"){
 		//TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
-		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,0)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
+		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,1)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
 			if (err) {
 				res.json({code:400,message:err})
 			}else{
