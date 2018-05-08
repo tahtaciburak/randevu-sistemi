@@ -62,10 +62,6 @@
                   <input type="text" class="form-control" id="aciklama" placeholder="Randevu hakkında açıklamanız">
                 </div>
                 <div class="form-group">
-                  <label for="aciklama">Randevu Hakkında Kısa Açıklama:</label>
-                  <input type="text" class="form-control" id="aciklama" placeholder="Randevu hakkında açıklamanız">
-                </div>
-                <div class="form-group">
                   <div class="custom-file">
                       <input type="file" class=" form-control custom-file-input" id="inputGroupFile02">
                       <label class=" form-control custom-file-label" for="inputGroupFile02">Ek halinde dosya yükleyin</label>
@@ -75,7 +71,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary " data-dismiss="modal">İptal</button>
-              <button type="button" class="btn btn-primary btn-block">Onayla</button>
+              <div id="takeAppointment" type="button" class="btn btn-primary btn-block">Onayla</div>
             </div>
           </div>
         </div>
@@ -109,9 +105,18 @@
            $('#tableContent').html(tableContents);
         }
         
-        function take(userId){
+        function take(appID){
             $('#exampleModalLong').modal('toggle');
-  
+            
+            document.getElementById('takeAppointment').onclick = function(){
+              let desc = $('#aciklama').val();
+              console.log("Yolla",desc)
+              $.post( '/appointments/take', { AppointmentID : appID })
+              .done(function( data ) {
+                console.log(JSON.stringify(data))
+              });
+            }
+
         }
 
     </script>

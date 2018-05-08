@@ -81,23 +81,20 @@ router.get('/all/:user_id',isLoggedIn,function (req,res) {
 })
 
 router.post("/take", function (req, res) {
-  var taker_id = req.body.GuestID
-  var appointment_date = req.body.StartDateTime
-  var giver_id = req.body.HostID
-
-  db.query("select case when (select count(*) from Appointments where HostID = ? and StartDateTime = ? and AppointmentStatus = 1) = 0 then 0 else 1 end as count", [giver_id, appointment_date], function(err,result) {
+  let guest_id = req.user.id
+	let AppointmentID = req.body.AppointmentID
+	console.log(guest_id," -- ",AppointmentID);
+  db.query("select case when (select count(*) from Appointments where AppointmentID = ? and AppointmentStatus = 1) = 0 then 0 else 1 end as count", [AppointmentID], function(err,result) {
     if(result != null){
 
       if(result[0].count == 1){
-        db.query("update Appointments set AppointmentStatus = 2 where HostID = ? and StartDateTime = ?", [giver_id, appointment_date], function(err,result) {
-          console.log("Giver ID: " + giver_id + " Taker ID: " + taker_id + " Datetime: " + appointment_date);
-          res.json({code:200})
+        db.query("update Appointments set AppointmentStatus = 2 where AppointmentID = ?", [AppointmentID], function(err,result) {
+					if(err) throw err;
+					db.query("update Appointments set GuestID = ? where AppointmentID = ?", [guest_id,AppointmentID], function(err,result) {
+						if(err) throw err;
+						res.json({code:200})
+					})
         })
-        db.query("update Appointments set GuestID = ? where HostID = ? and StartDateTime = ?", [taker_id,giver_id, appointment_date], function(err,result) {
-          console.log("Giver ID: " + giver_id + " Taker ID: " + taker_id + " Datetime: " + appointment_date);
-          res.json({code:200})
-        })
-
       }else {
         res.send({code:201})
         return err
