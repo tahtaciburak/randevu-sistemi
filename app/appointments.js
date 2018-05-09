@@ -119,11 +119,25 @@ router.post("/search", function(req,res){
   })
 })
 
+router.post("/cancel", function(req,res){
+  var start_date = req.body.StartDateTime
+  var host_id = req.body.HostID
+
+  console.log("Cancel part", start_date, " ", host_id)
+  db.query("update Appointments set AppointmentStatus = 3 where HostID = ? and StartDateTime = ? ", [host_id, start_date], function(err,result) {
+        if(err){
+          res.json({code:400, message:err})
+        }else{
+          res.send({code:200})
+        }
+  })
+})
+
 router.post("/new",function (req,res) {
 	var host_id = req.user.id
-    var appointment_header = req.body.appointment_header
-    var appointment_description = req.body.appointment_description
-    var length = req.body.length //dakika cinsinden
+  var appointment_header = req.body.appointment_header
+  var appointment_description = req.body.appointment_description
+  var length = req.body.length //dakika cinsinden
 	var start_date = req.body.start_date
 	var start_time = req.body.start_time
 	var reccurrency = req.body.reccurrency
@@ -142,7 +156,6 @@ router.post("/new",function (req,res) {
 			}
 		})
     }else if(rec_pattern=="weekly"){
-		//TODO momentjs ile gun gun ekleme yapilabilir bence bu kismi yaparken momentjs i derinlemesine arastir
 		for(var i=0;i<reccurrency;i++){
 
 		}
@@ -160,5 +173,12 @@ function isLoggedIn(req, res, next) {
 	res.redirect('/');
 }
 
+function rotate(day){
+  if (day != 1){
+    return day-1;
+  }else{
+    return 7;
+  }
+}
 
 module.exports = router
