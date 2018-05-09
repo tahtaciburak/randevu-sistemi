@@ -1,10 +1,11 @@
 // config/database.js
 module.exports = {
     'connection': {
-        'host': 'localhost',
+       'host': 'localhost',
         'user': 'root',
-        'password': 'sokrates34'
-    },
+        'password': '123'
+   },
+
 	'database': 'calendar',
     'users_table': 'users'
 };

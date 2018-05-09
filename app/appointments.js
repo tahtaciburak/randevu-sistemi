@@ -81,23 +81,20 @@ router.get('/all/:user_id',isLoggedIn,function (req,res) {
 })
 
 router.post("/take", function (req, res) {
-  var taker_id = req.body.GuestID
-  var appointment_date = req.body.StartDateTime
-  var giver_id = req.body.HostID
-
-  db.query("select case when (select count(*) from Appointments where HostID = ? and StartDateTime = ? and AppointmentStatus = 1) = 0 then 0 else 1 end as count", [giver_id, appointment_date], function(err,result) {
+  let guest_id = req.user.id
+	let AppointmentID = req.body.AppointmentID
+	console.log(guest_id," -- ",AppointmentID);
+  db.query("select case when (select count(*) from Appointments where AppointmentID = ? and AppointmentStatus = 1) = 0 then 0 else 1 end as count", [AppointmentID], function(err,result) {
     if(result != null){
 
       if(result[0].count == 1){
-        db.query("update Appointments set AppointmentStatus = 2 where HostID = ? and StartDateTime = ?", [giver_id, appointment_date], function(err,result) {
-          console.log("Giver ID: " + giver_id + " Taker ID: " + taker_id + " Datetime: " + appointment_date);
-          res.json({code:200})
+        db.query("update Appointments set AppointmentStatus = 2 where AppointmentID = ?", [AppointmentID], function(err,result) {
+					if(err) throw err;
+					db.query("update Appointments set GuestID = ? where AppointmentID = ?", [guest_id,AppointmentID], function(err,result) {
+						if(err) throw err;
+						res.json({code:200})
+					})
         })
-        db.query("update Appointments set GuestID = ? where HostID = ? and StartDateTime = ?", [taker_id,giver_id, appointment_date], function(err,result) {
-          console.log("Giver ID: " + giver_id + " Taker ID: " + taker_id + " Datetime: " + appointment_date);
-          res.json({code:200})
-        })
-
       }else {
         res.send({code:201})
         return err
@@ -108,15 +105,12 @@ router.post("/take", function (req, res) {
   })
 })
 
-router.post("/search", function(req,res){
-  var end_date = req.body.EndDateTime
-  var start_date = req.body.StartDateTime
-  var host_id = req.body.HostID
-  var counter = 0;
-
-  db.query("select * from Appointments where HostID = ? and StartDateTime between ? and ? ", [host_id, start_date, end_date], function(err,result) {
-        res.send(result)
-  })
+router.get("/search/:query", function(req,res){
+	var query = req.params.query
+	db.query("select * from Appointments,users where HostID = id and username LIKE CONCAT('%',?, '%') ", [query], function(err,result) {
+			if(err) throw err;
+			res.status(200).send(result);
+	})
 })
 
 router.post("/cancel", function(req,res){
@@ -148,7 +142,7 @@ router.post("/new",function (req,res) {
 
     if(rec_pattern=="single"){
 		//TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
-		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime) VALUES(?,?,?,?,?,?)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
+		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,1)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
 			if (err) {
 				res.json({code:400,message:err})
 			}else{

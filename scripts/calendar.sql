@@ -26,18 +26,19 @@ SET time_zone = "+00:00";
 -- Tablo için tablo yapısı `Appointments`
 --
 
-CREATE TABLE `Appointments` (
-  `AppointmentID` int(11) NOT NULL,
-  `HostID` int(11) NOT NULL,
-  `GuestID` int(11) NOT NULL,
-  `StartDateTime` datetime NOT NULL,
-  `Length` int(11) NOT NULL,
-  `AppointmentStatus` int(11) NOT NULL,
-  `AppointmentHeader` varchar(100) DEFAULT NULL,
-  `AppointmentDescription` varchar(1000) DEFAULT NULL,
-  `PeriodCount` int(11) NOT NULL
+CREATE TABLE Appointments (
+  AppointmentID int(11) NOT NULL auto_increment,
+  HostID int(11) NOT NULL,
+  GuestID int(11),
+  StartDateTime datetime NOT NULL,
+  Length int(11) NOT NULL,
+  AppointmentStatus int(11) NOT NULL,
+  AppointmentHeader varchar(100) DEFAULT NULL,
+  AppointmentDescription varchar(1000) DEFAULT NULL,
+  Location varchar(100) NOT NULL,
+  PeriodCount int(11),
+  primary key(AppointmentID)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
-
 --
 -- Tablo döküm verisi `Appointments`
 --
@@ -55,17 +56,16 @@ INSERT INTO `Appointments` (`AppointmentID`, `HostID`, `GuestID`, `StartDateTime
 CREATE TABLE `users` (
   `id` int(10) UNSIGNED NOT NULL,
   `username` varchar(20) NOT NULL,
-  `password` char(60) NOT NULL,
-  `user_type` int(2) NOT NULL
+  `password` char(60) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Tablo döküm verisi `users`
 --
 
-INSERT INTO `users` (`id`, `username`, `password`, `user_type`) VALUES
-(1, 'b', '$2a$10$WmbuoKikxtW7hSW.vPbZiOdvktPJuLEBXPMFwMdkuQ6myN01up9P2', 0),
-(2, 'hibestilburak', '$2a$10$A/M2kMoNlZ4YxTtr7C3mmeOObJ5VMHWB2joqmpOOZiPPpgqFLXBYC', 0);
+INSERT INTO `users` (`id`, `username`, `password`) VALUES
+(1, 'b', '$2a$10$WmbuoKikxtW7hSW.vPbZiOdvktPJuLEBXPMFwMdkuQ6myN01up9P2'),
+(2, 'hibestilburak', '$2a$10$A/M2kMoNlZ4YxTtr7C3mmeOObJ5VMHWB2joqmpOOZiPPpgqFLXBYC');
 
 --
 -- Dökümü yapılmış tablolar için indeksler
@@ -74,8 +74,6 @@ INSERT INTO `users` (`id`, `username`, `password`, `user_type`) VALUES
 --
 -- Tablo için indeksler `Appointments`
 --
-ALTER TABLE `Appointments`
-  ADD PRIMARY KEY (`AppointmentID`);
 
 --
 -- Tablo için indeksler `users`
@@ -92,8 +90,6 @@ ALTER TABLE `users`
 --
 -- Tablo için AUTO_INCREMENT değeri `Appointments`
 --
-ALTER TABLE `Appointments`
-  MODIFY `AppointmentID` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 --
 -- Tablo için AUTO_INCREMENT değeri `users`
 --

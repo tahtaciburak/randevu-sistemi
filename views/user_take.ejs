@@ -8,58 +8,38 @@
         <h3><b>Randevu Al</b></h3>
         
         <div>
-            <form>
+            
                 <div class="form-row align-items-center">
                   <div class="col-sm">
                     <label class="sr-only" for="inlineFormInputName">Kişi, Kurum ve Etiketlerde Arayın...</label>
-                    <input type="text" class="form-control" id="inlineFormInputName" placeholder="Kişi, Kurum ve Etiketlerde Arayın...">
+                    <input type="text" class="form-control" id="SearchInput" placeholder="Kişi, Kurum ve Etiketlerde Arayın...">
                   </div>
                   
                   <div class="col-auto my-1">
-                    <button type="submit" class="btn btn-primary"><span class="fas fa-search"></span> Ara</button>
+                    <button onclick="search()" class="btn btn-primary"><span class="fas fa-search"></span> Ara</button>
                   </div>
                 </div>
-              </form>
+              
               
         </div>
 
         <!-- Bulunan sonuçlar -->
         
         
-        <div class="alert alert-warning" style="margin:15px 0;"><b>"yıldız"</b> için bulunan sonuçlar :</div>
+        <div id="error_msg"class="alert alert-warning" style="margin:15px 0;"><b>"yıldız"</b> için bulunan sonuçlar :</div>
         
-        <table class="table table-borderless">
+        <table id="tableContainer" class="table table-borderless">
             <thead>
               <tr> 
-                <th scope="col"><span class="fas fa-address-book"></span> Ad Soyad</th>
-                <th scope="col"><span class="fas fa-tag"></span> Etiketler</th>
-                <th scope="col"><span class="fas fa-building"></span> Kurum</th>
-                <th scope="col"><span class="fas fa-user"></span> Kullancı Adı</th>
+                <th scope="col"><span class="fas fa-address-book"></span> Kullanıcı Adı</th>
+                <th scope="col"><span class="fas fa-tag"></span> Randevu Açıklaması</th>
+                <th scope="col"><span class="fas fa-building"></span> Lokasyon</th>
+                <th scope="col"><span class="fas fa-user"></span> Zaman</th>
                 <th scope="col"><span class="fas fa-eye"></span> </th>
               </tr>
             </thead>
-            <tbody>
-              <tr >
-                <td>Ahmet Tevfik İnan</td>
-                <td>Yıldız,Sistem Programlama,Bilgisayar Mühendisliği</td>
-                <td>Yıldız Teknik Üniversitesi</td>
-                <td>@ahmettevfik</td>
-                <td><button class="btn btn-success btn-block" onclick="take(1)"><span class="fas fa-arrow-circle-right "></span> Al</button></td>
-              </tr>
-              <tr>
-                <td>Ziya Cihan Tayşi</td>
-                <td>Yıldız,Mobil,Bilgisayar Mühendisliği</td>
-                <td>Yıldız Teknik Üniversitesi</td>
-                <td>@ziya</td>
-                <td><button class="btn btn-success btn-block" onclick="take(1)"><span class="fas fa-arrow-circle-right"></span> Al</button></td>
-              </tr>
-              <tr>
-                <td>Umut Yıldız</td>
-                <td>Girişimcilik,TTO,Startup,Mentor </td>
-                <td>ITU Teknopark TTO</td>
-                <td>@umut111</td>
-                <td><button class="btn btn-success btn-block" onclick="take(1)"><span class="fas fa-arrow-circle-right"></span> Al</button></td>
-              </tr>
+            <tbody id="tableContent">
+              
             </tbody>
           </table>
     </div>
@@ -82,10 +62,6 @@
                   <input type="text" class="form-control" id="aciklama" placeholder="Randevu hakkında açıklamanız">
                 </div>
                 <div class="form-group">
-                  <label for="aciklama">Randevu Hakkında Kısa Açıklama:</label>
-                  <input type="text" class="form-control" id="aciklama" placeholder="Randevu hakkında açıklamanız">
-                </div>
-                <div class="form-group">
                   <div class="custom-file">
                       <input type="file" class=" form-control custom-file-input" id="inputGroupFile02">
                       <label class=" form-control custom-file-label" for="inputGroupFile02">Ek halinde dosya yükleyin</label>
@@ -95,7 +71,7 @@
             </div>
             <div class="modal-footer">
               <button type="button" class="btn btn-secondary " data-dismiss="modal">İptal</button>
-              <button type="button" class="btn btn-primary btn-block">Onayla</button>
+              <div id="takeAppointment" type="button" class="btn btn-primary btn-block">Onayla</div>
             </div>
           </div>
         </div>
@@ -104,10 +80,70 @@
 
 
     <script>
-        function take(userId){
-            $('#exampleModalLong').modal('toggle');
-  
+      // Başlangıçta gizle
+      $('#error_msg').hide();
+      $('#tableContainer').hide();
+
+        function search(){
+            let searchQuery = $('#SearchInput').val();
+            $.getJSON("/appointments/search/"+searchQuery,function(data){
+              let msg ="";
+              if(data.length >0 ){
+                msg = "<b>\""+searchQuery +"\"</b> için bulunan sonuçlar:"
+                $('#tableContainer').show()
+              }
+              else{
+                msg = "Hiç bir sonuç bulunamadı. Farklı kelimelerle tekrar armayı deneyin!"
+                $('#tableContainer').hide()
+              }
+              
+              $('#error_msg').html(msg)
+              $('#error_msg').show();
+              updateTable(data);
+
+            })
         }
+
+        function updateTable(data){
+          
+          let tableContents ="";
+          data.forEach(element => {
+            tableContents += 
+             "<tr ><td>" + element.username +"</td>"
+            +"<td>" + element.AppointmentHeader +"</td>"
+            +"<td>" + element.Location +"</td>"
+            +"<td>" + element.StartDateTime +"</td>";
+            if(element.AppointmentStatus == "1"){
+              tableContents+='<td><button class="btn btn-success btn-block" onclick="take('+element.AppointmentID +')"><span class="fas fa-arrow-circle-right "></span> Al</button></td>'   
+              +" </tr>";
+            }else{
+              tableContents+='<td><button class="btn btn-danger btn-block" >Dolu</button></td>'   
+              +" </tr>"; 
+            }
+
+          });
+
+           $('#tableContent').html(tableContents);
+        }
+        
+        function take(appID){
+            $('#exampleModalLong').modal('toggle');
+            
+            document.getElementById('takeAppointment').onclick = function(){
+              let desc = $('#aciklama').val();
+              console.log("Yolla",desc)
+              $.post( '/appointments/take', { AppointmentID : appID })
+              .done(function( data ) {
+                if(data.code == "200"){
+                  $('#exampleModalLong').modal('hide');
+                }else if(data.code == "201"){
+                  alert("Bu randevu alınamıyor. Lütfen farklı bir randevuyu deneyin!");
+                }
+              });
+            }
+
+        }
+
     </script>
 </body>
 </html>
