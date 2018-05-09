@@ -127,6 +127,28 @@ router.post("/cancel", function(req,res){
   })
 })
 
+router.post("/getAppointmentInformation", function(req, res) {
+  var appointment_id = req.body.appointmentID
+  var query = "select AppointmentID, AppointmentDescription, AppointmentHeader, Giver, GuestID, Length, Location," +
+    "Taker, statusString as AppointmentStatus from (select AppointmentID, AppointmentDescription, AppointmentHeader, Giver," +
+    "GuestID, AppointmentStatus, Length, Location, username as Taker from " +
+    "(select AppointmentID, AppointmentDescription, AppointmentHeader, username as Giver, GuestID, " +
+    "AppointmentStatus, Length, Location from Appointments inner join users on Appointments.HostID = users.id " +
+    "where AppointmentID = ?) tablo inner join users on users.id = tablo.GuestID) tablo2 inner join " +
+    "AppointmentStatus on tablo2.AppointmentStatus = AppointmentStatus.appointmentStatus"
+
+    console.log("Query: ", query);
+
+  db.query(query, [appointment_id],
+    function (err, result) {
+        if(err){
+          res.json({code:400, message:err})
+        }else{
+          res.send(result)
+        }
+    })
+})
+
 router.post("/new",function (req,res) {
 	var host_id = req.user.id
   var appointment_header = req.body.appointment_header
