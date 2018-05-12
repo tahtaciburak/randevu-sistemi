@@ -126,7 +126,7 @@ router.post("/cancel", function(req,res){
 })
 
 router.post("/getAppointmentInformation", function(req, res) {
-  var appointment_id = req.body.appointmentID
+  var appointment_id = req.body.AppointmentID
   var query = "select AppointmentID, AppointmentDescription, AppointmentHeader, Giver, GuestID, Length, Location," +
     "Taker, statusString as AppointmentStatus from (select AppointmentID, AppointmentDescription, AppointmentHeader, Giver," +
     "GuestID, AppointmentStatus, Length, Location, username as Taker from " +
