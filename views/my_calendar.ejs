@@ -5,9 +5,9 @@
   <link href='/fullcalendar.min.css' rel='stylesheet' />
   <link href='/fullcalendar.print.min.css' rel='stylesheet' media='print' />
   <script src='/lib/moment.min.js'></script>
-  <script src='/lib/jquery.min.js'></script>
   <script src='/fullcalendar.min.js'></script>
   <script src='/locale-all.js'></script>
+  <link rel="stylesheet" href="//netdna.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css">
   
   <script>
     
@@ -21,52 +21,14 @@
         locale:'TR',
         themeSystem:'bootstrap3',
         selectable:'true',
-        /*
         dayClick:function(date){
-          alert('clicked on: '+date.format())
-        },*/
-        defaultDate: '2018-03-12',
+          $('#exampleModalLong').modal('toggle');
+        },
+        defaultDate: moment(),
         navLinks: true, // can click day/week names to navigate views
         editable: true,
         eventLimit: true, // allow "more" link when too many events
-        events: [
-        {
-          title: 'All Day Event',
-          start: '2018-03-01',
-          selectable:true
-        }/*,
-        {
-          title: 'Long Event',
-          start: '2018-03-07',
-          end: '2018-03-10'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2018-03-09T16:00:00'
-        },
-        {
-          id: 999,
-          title: 'Repeating Event',
-          start: '2018-03-16T16:00:00'
-        },
-        {
-          title: 'Dinner',
-          start: '2018-03-12T20:00:00',
-          color: 'purple'
-        },
-        {
-          title: 'Birthday Party',
-          start: '2018-03-13T07:00:00'
-        },
-        {
-          title: 'Click for Google',
-          url: 'http://google.com/',
-          start: '2018-03-28',
-          color: 'purple'
-        }*/
-        ],
-        
+        events: [],
         eventColor: '#378006',
         eventTextColor: 'white'
       }
@@ -82,6 +44,7 @@
              takvimObjesi.events.push({
               title: all_results[i].AppointmentHeader,
               start: all_results[i].StartDateTime,
+              end: moment(all_results[i].StartDateTime).add(30,'m'),
               color: 'purple'
              })
             }
@@ -127,6 +90,43 @@
 <body>
   
   <div id='calendar'></div>
-  
+    <!-- Modal -->
+    <div class="modal fade" id="exampleModalLong" style="padding-top:100px;" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h3 class="modal-title" id="exampleModalLongTitle">Seçili Tarihe Randevu Aç</h3>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">            
+            <form>
+              <div class="form-group">
+                <label for="baslik">Randevu Başlığı:</label>
+                <input type="text" class="form-control" id="baslik" placeholder="Randevu hakkında açıklamanız">
+              </div>
+              <div class="form-group">
+                <label for="sure">Randevu Süresi:</label>
+                <input type="text" class="form-control" id="sure" placeholder="Randevu hakkında açıklamanız">
+              </div>
+              <div class="form-group">
+                <label for="lokasyon">Randevu Lokasyonu:</label>
+                <input type="text" class="form-control" id="lokasyon" placeholder="Randevu hakkında açıklamanız">
+              </div>
+              <div class="form-group">
+                <label for="aciklama">Randevu Açıklaması:</label>
+                <input type="text" class="form-control" id="aciklama" placeholder="Randevu hakkında açıklamanız">
+              </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary " data-dismiss="modal">İptal</button>
+            <div id="takeAppointment" type="button" class="btn btn-success btn-block">Onayla</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
 </body>
 </html>
