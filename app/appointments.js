@@ -61,7 +61,7 @@ router.get('/guest/:guest_id',isLoggedIn,function (req,res) {
 router.get('/my/all/',isLoggedIn,function (req,res) {
 	var user_id = req.user.id;
 
-	db.query("SELECT * FROM Appointments a, users u WHERE (a.GuestId=? OR a.HostId=?) AND (u.id = a.GuestId OR u.id = a.HostId) ORDER BY StartDateTime",[user_id,user_id],function (err,result) {
+	db.query("SELECT * FROM Appointments a, users u WHERE (a.GuestId=? AND u.id = a.HostId) OR (a.HostId=? AND u.id = a.GuestId) ORDER BY StartDateTime",[user_id,user_id],function (err,result) {
 		if(err)
 			throw err
         //burada result degiskeni icerisinde bizim tum randevularimiz donmus olacak

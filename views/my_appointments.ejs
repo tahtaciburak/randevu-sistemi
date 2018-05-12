@@ -21,6 +21,7 @@
             //TODO: Abi buraya jquery ile tablo doldurma ozelligi yazilacak
             $(".item").remove()
             moment.locale('tr');
+            console.log(results)
             for(var i=0;i<results.length;i++){
                 if(moment(results[i].StartDateTime).isValid() && !moment().isAfter(moment(results[i].StartDateTime))){
                     $("#appointment_list").append(
