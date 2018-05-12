@@ -51,28 +51,6 @@
           start: '2018-03-16T16:00:00'
         },
         {
-          title: 'Conference',
-          start: '2018-03-11',
-          end: '2018-03-13'
-        },
-        {
-          title: 'Meeting',
-          start: '2018-03-12T10:30:00',
-          end: '2018-03-12T12:30:00'
-        },
-        {
-          title: 'Lunch',
-          start: '2018-03-12T12:00:00'
-        },
-        {
-          title: 'Meeting',
-          start: '2018-03-12T14:30:00'
-        },
-        {
-          title: 'Happy Hour',
-          start: '2018-03-12T17:30:00'
-        },
-        {
           title: 'Dinner',
           start: '2018-03-12T20:00:00',
           color: 'purple'
@@ -92,14 +70,40 @@
         eventColor: '#378006',
         eventTextColor: 'white'
       }
-
-      takvimObjesi.events.push(
-        {
-          title: 'Meeting',
-          start: '2018-03-12T14:30:00'
-        });
-
-      $('#calendar').fullCalendar(takvimObjesi);
+      $.ajax(
+            {
+                url:"/appointments/my/host/",
+                success: function(result){
+                    all_results = result
+                }
+            }
+        ).done(function(){
+          for(var i=0;i<all_results.length;i++){
+             takvimObjesi.events.push({
+              title: all_results[i].AppointmentHeader,
+              start: all_results[i].StartDateTime,
+              color: 'purple'
+             })
+            }
+        })
+        $.ajax(
+            {
+                url:"/appointments/my/guest/",
+                success: function(result2){
+                    all_results2 = result2
+                }
+            }
+        ).done(function(){
+          for(var i=0;i<all_results2.length;i++){
+             takvimObjesi.events.push({
+              title: all_results2[i].AppointmentHeader,
+              start: all_results2[i].StartDateTime,
+              color: 'red'
+             })
+            }
+            console.log(all_results2)
+            $('#calendar').fullCalendar(takvimObjesi);
+        })
 
     });
     
