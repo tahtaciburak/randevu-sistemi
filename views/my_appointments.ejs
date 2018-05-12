@@ -1,3 +1,4 @@
+<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
 <script>
     var all_results;
     $(document).ready(function(){
@@ -11,6 +12,7 @@
                 success: function(result){
                     all_results = result
                     fillTable(all_results)
+                    console.log(all_results)
                 }
             }
         )
@@ -18,19 +20,19 @@
         function fillTable(results){
             //TODO: Abi buraya jquery ile tablo doldurma ozelligi yazilacak
             $(".item").remove()
-
+            moment.locale('tr');
             for(var i=0;i<results.length;i++){
-                $("#appointment_list").append(
-                    '<tr class="item">'+"<td>"+results[i].AppointmentHeader+"</td>"+
-                    "<td>"+results[i].AppointmentStatus+"</td>"+
-                    "<td>"+results[i].GuestID+"</td>"+
-                    "<td>"+results[i].StartDateTime+"</td>"+
-                    "<td>"+results[i].StartDateTime+"</td>"+
-                    "<td>"+results[i].Location+"</td>"+
-                    '<td><button class="btn btn-info">Bilgi</button><button class="btn btn-danger";>İptal</button></td>'+
-                    "</tr>"
+                if(moment(results[i].StartDateTime).isValid() && !moment().isAfter(moment(results[i].StartDateTime))){
+                    $("#appointment_list").append(
+                        '<tr class="item">'+"<td>"+results[i].AppointmentHeader+"</td>"+
+                        "<td>"+results[i].username+"</td>"+
+                        "<td>"+moment(results[i].StartDateTime).fromNow()+"</td>"+
+                        "<td>"+results[i].Location+"</td>"+
+                        '<td><button style="width:45%;margin-left:5%;" class="btn btn-info">Detay</button><button style="width:45%;margin-left:5%;" class="btn btn-danger";>İptal</button></td>'+
+                        "</tr>"
 
-                )
+                    )
+                }
             }
         }
     }
@@ -38,13 +40,11 @@
 <table id="my_appointments" class="table table-striped">
     <thead>
         <tr>
-        <th>Randevu Başlığı</th>
-        <th>Durum</th>
-        <th>İlgili Kişi</th>
-        <th>Tarih</th>
-        <th>Saat</th>
-        <th>Lokasyon</th>
-        <th>İşlemler</th>
+        <th><b>Randevu Başlığı</b></th>
+        <th><b>İlgili Kişi</b></th>
+        <th><b>Tarih</b></th>
+        <th><b>Lokasyon</b></th>
+        <th><b>İşlemler</b></th>
         </tr>
     </thead>
     <tbody id="appointment_list">

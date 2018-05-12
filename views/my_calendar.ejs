@@ -48,8 +48,8 @@
           for(var i=0;i<all_results.length;i++){
              takvimObjesi.events.push({
               title: all_results[i].AppointmentHeader,
-              start: all_results[i].StartDateTime,
-              end: moment(all_results[i].StartDateTime).add(30,'m'),
+              start: moment(all_results[i].StartDateTime),
+              end: moment(all_results[i].StartDateTime).add(all_results[i].Length,'m'),
               color: 'purple'
              })
             }
@@ -65,7 +65,8 @@
           for(var i=0;i<all_results2.length;i++){
              takvimObjesi.events.push({
               title: all_results2[i].AppointmentHeader,
-              start: all_results2[i].StartDateTime,
+              start: moment(all_results2[i].StartDateTime),
+              end: moment(all_results2[i].StartDateTime).add(all_results2[i].Length,'m'),
               color: 'red'
              })
             }
