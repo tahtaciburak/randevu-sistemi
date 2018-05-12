@@ -114,11 +114,9 @@ router.get("/search/:query", function(req,res){
 })
 
 router.post("/cancel", function(req,res){
-  var start_date = req.body.StartDateTime
-  var host_id = req.body.HostID
+  var appointment_ID = req.body.AppointmentID
 
-  console.log("Cancel part", start_date, " ", host_id)
-  db.query("update Appointments set AppointmentStatus = 3 where HostID = ? and StartDateTime = ? ", [host_id, start_date], function(err,result) {
+  db.query("update Appointments set AppointmentStatus = 3 where AppointmentID = ? ", [appointment_ID], function(err,result) {
         if(err){
           res.json({code:400, message:err})
         }else{
