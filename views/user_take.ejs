@@ -2,6 +2,7 @@
 <!doctype html>
 <html>
 <% include ./header %>
+<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
 <body >
     <div class="container">
         
@@ -80,6 +81,7 @@
 
 
     <script>
+      moment.locale('tr');
       // Başlangıçta gizle
       $('#tableContainer').hide();
 
@@ -111,7 +113,7 @@
              "<tr ><td>" + element.username +"</td>"
             +"<td>" + element.AppointmentHeader +"</td>"
             +"<td>" + element.Location +"</td>"
-            +"<td>" + element.StartDateTime +"</td>";
+            +"<td>" + moment(element.StartDateTime).format("llll") +"</td>";
             if(element.AppointmentStatus == "1"){
               tableContents+='<td><button class="btn btn-success btn-block" onclick="take('+element.AppointmentID +')"><span class="fas fa-arrow-circle-right "></span> Al</button></td>'   
               +" </tr>";

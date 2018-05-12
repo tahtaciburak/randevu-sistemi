@@ -106,8 +106,10 @@ router.post("/take", function (req, res) {
 })
 
 router.get("/search/:query", function(req,res){
-	var query = req.params.query
-	db.query("select * from Appointments,users where HostID = id and username LIKE CONCAT('%',?, '%') ", [query], function(err,result) {
+  let query = req.params.query
+  let user_id = req.user.id
+
+	db.query("select * from Appointments,users where HostID = id and username LIKE CONCAT('%',?, '%') AND id != ?", [query,user_id], function(err,result) {
 			if(err) throw err;
 			res.status(200).send(result);
 	})
