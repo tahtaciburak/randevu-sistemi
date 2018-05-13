@@ -1,0 +1,50 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+    <% include ./header %>    
+    <body>
+        <div class="container">
+            <legend>Randevu Bilgileri</legend>
+            <div class="well">
+                <div class="row">
+                    <h5><strong>Randevu ID: </strong></h5>
+                    <h5><%= a %></h5>
+                 </div>
+            <div class="row">
+                <h5><strong>Randevu Başlığı: </strong></h5>
+                <h5><%= a %></h5>
+            </div>
+            <div class="row">
+                <h5><strong>Randevu Tarihi: </strong></h5>
+                <h5><%= a %></h5>
+            </div>
+            <div class="row">
+                <h5><strong>İlgili Kişi: </strong></h5>
+                <h5><%= a %></h5>
+            </div>
+            <div class="row">
+                <h5><strong>Randevu Açıklaması: </strong></h5>
+                <h5><%= a %></h5>
+            </div>
+            </div>
+        </div>
+        <div class="container">
+            <legend>Randevu Gecmisi</legend>            
+            <div class="well">
+                <table id="my_appointments" class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th><b>Randevu Başlığı</b></th>
+                            <th><b>Tarih</b></th>
+                            <th><b>Lokasyon</b></th>
+                            <th><b>Sonuc</b></th>
+                        </tr>
+                    </thead>
+                    <tbody id="appointment_list">
+                    </tbody>
+                </table>
+                </div>
+            </div>
+        </div>
+    </body>
+</html>

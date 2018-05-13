@@ -28,6 +28,14 @@ router.get("/calendar",function (req,res) {
 
 })
 
+router.get('/appointments/detail/:appointment_id',isLoggedIn,function(req,res){
+    let appointment_id =req.params.appointment_id;
+    res.render("appointment_detail.ejs",{
+        user : getSecureUserInfo(req.user),
+        a : appointment_id
+    })
+  })
+
 function isLoggedIn(req, res, next) {
 	if (req.isAuthenticated())
 		return next();
