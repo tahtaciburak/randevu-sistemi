@@ -80,10 +80,6 @@ router.get('/all/:user_id',isLoggedIn,function (req,res) {
 	})
 })
 
-router.get('/detail/:appointment_id',isLoggedIn,function(req,res){
-  let appointment_id =req.body.appointment_id;
-  res.render("appointment_detail.ejs")
-})
 
 router.post("/take", function (req, res) {
   let guest_id = req.user.id
