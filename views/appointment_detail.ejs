@@ -1,35 +1,69 @@
 <!-- views/index.ejs -->
 <!doctype html>
 <html>
-    <% include ./header %>    
+    <% include ./header %>
+    <script>
+        $.post("/appointments/getAppointmentInformation",{
+            AppointmentID: <%= a %>
+        }).done(function(data){
+            console.log(data)
+            $('#id-area').html("<span>"+data[0].AppointmentID+"</span>")
+            $('#header-area').html("<span>"+data[0].AppointmentHeader+"</span>")
+            $('#date-area').html("<span>"+data[0].StartDateTime+"</span>")
+            $('#host-area').html("<span>"+data[0].HostID+"</span>")
+            $('#guest-area').html("<span>"+data[0].GuestID+"</span>")
+            $('#desc-area').html("<span>"+data[0].AppointmentDescription+"</span>")
+            $('#location-area').html("<span>"+data[0].Location+"</span>")
+            getRelationsBetweenUsers(data.HostID,data.GuestID)
+
+        })
+
+        function getRelationsBetweenUsers(host,guest){
+            $.post("/appointments/getRelations",{
+                host_id :host,
+                guest_id : guest    
+            }).done(function(relationsData){
+                console.log(relationsData)
+            })
+        }
+
+    </script>    
     <body>
         <div class="container">
             <legend>Randevu Bilgileri</legend>
             <div class="well">
                 <div class="row">
-                    <h5><strong>Randevu ID: </strong></h5>
-                    <h5><%= a %></h5>
+                    <h5><strong>Randevu ID:</strong></h5>
+                    <h5 id="id-area"></h5>
                  </div>
             <div class="row">
-                <h5><strong>Randevu Başlığı: </strong></h5>
-                <h5><%= a %></h5>
+                <h5><strong>Randevu Başlığı:</strong></h5>
+                <h5 id="header-area"></h5>
             </div>
             <div class="row">
                 <h5><strong>Randevu Tarihi: </strong></h5>
-                <h5><%= a %></h5>
+                <h5 id="date-area"></h5>
             </div>
             <div class="row">
-                <h5><strong>İlgili Kişi: </strong></h5>
-                <h5><%= a %></h5>
+                <h5><strong>Lokasyon: </strong></h5>
+                <h5 id="location-area"></h5>
             </div>
+            <div class="row">
+                <h5><strong>Ev Sahibi Kişi:</strong></h5>
+                <h5 id="host-area"></h5>
+            </div>
+            <div class="row">
+                    <h5><strong>Misafir Kişi: </strong></h5>
+                    <h5 id="guest-area"></h5>
+                </div>
             <div class="row">
                 <h5><strong>Randevu Açıklaması: </strong></h5>
-                <h5><%= a %></h5>
+                <h5 id="desc-area"></h5>
             </div>
             </div>
         </div>
         <div class="container">
-            <legend>Randevu Gecmisi</legend>            
+            <legend>Randevu Geçmişi</legend>            
             <div class="well">
                 <table id="my_appointments" class="table table-striped">
                     <thead>
