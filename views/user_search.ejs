@@ -1,0 +1,317 @@
+<!-- views/index.ejs -->
+<!doctype html>
+<html>
+<% include ./header %>
+<script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>
+<body >
+    <div class="container">
+        
+        <h3><b>Kişilerde Arayın</b></h3>
+        
+        <div>
+            
+                <div class="form-row align-items-center">
+                  <div class="col-sm">
+                    <label class="sr-only" for="inlineFormInputName">Kişilerde Arayın...</label>
+                    <input type="text" class="form-control" id="SearchInput" placeholder="Kişi, Kurum ve Etiketlerde Arayın...">
+                  </div>
+                  
+                  <div class="col-auto my-1">
+                    <button onclick="search()" class="btn btn-primary"><span class="fas fa-search"></span> Ara</button>
+                  </div>
+                </div>
+              
+              
+        </div>
+
+        <!-- Bulunan sonuçlar -->
+        
+        
+        <div id="error_msg"class="alert alert-warning" style="margin:15px 0;">Arama yapmak için kullanıcı adını giriniz.</div>
+        
+        <table id="tableContainer" class="table table-borderless">
+            <thead>
+              <tr> 
+                <th scope="col"><span class="fas fa-address-book"></span> Kullanıcı Adı</th>
+                <th scope="col"><span class="fas fa-eye"></span> </th>
+              </tr>
+            </thead>
+            <tbody id="tableContent">
+              
+            </tbody>
+          </table>
+    <div id="hostVsGuest">
+        <div class="alert alert-info">Mor: Sizin açtığınız randevular , Mavi : Aldığınız randevular , Yeşil : Ev sahibinin müsait olduğu randevu aralıkları</div>
+          <div id='calendar'></div>
+          <!-- Modal -->
+          <div class="modal fade" id="exampleModalLong" style="padding-top:100px;" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+              <div class="modal-content">
+                <div class="modal-header">
+                  <h3 class="modal-title" id="exampleModalLongTitle">Seçili Tarihe Randevu Aç</h3>
+                  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                  </button>
+                </div>
+                <div class="modal-body">            
+                  <form>
+                    <div class="form-group">
+                      <label for="baslik">Randevu Başlığı:</label>
+                      <input type="text" class="form-control" id="baslik" placeholder="Proje Görüşmesi">
+                    </div>
+                    <div class="form-group">
+                        <label for="start_time">Randevu Başlangıç Saati</label>
+                        <input type="time" class="form-control" id="start_time" name="start_time">
+                    </div>
+                    <div class="form-group">
+                      <label for="sure">Randevu Süresi:</label>
+                      <input type="text" class="form-control" id="sure" placeholder="30">
+                    </div>
+                    <div class="form-group">
+                      <label for="lokasyon">Randevu Lokasyonu:</label>
+                      <input type="text" class="form-control" id="lokasyon" placeholder="DB-12 Amfisi YTÜ">
+                    </div>
+                    <div class="form-group">
+                      <label for="aciklama">Randevu Açıklaması:</label>
+                      <input type="text" class="form-control" id="aciklama" placeholder="Randevu hakkında açıklamanız">
+                    </div>
+                  </form>
+                </div>
+                <div class="modal-footer">
+                  <button type="button" class="btn btn-danger " data-dismiss="modal">İptal</button>
+                  <button id="giveAppointment" type="button" class="btn btn-success btn-block">Onayla</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <script>
+            function give(date){
+              console.log(moment(date).format(''))
+
+              document.getElementById("giveAppointment").onclick = function(){
+                let appointment_header = $("#baslik").val()
+                let length = $("#sure").val()
+                let location = $("#lokasyon").val()
+                let appointment_description = $("#aciklama").val()
+                let start_date = moment(date).format('')
+                let start_time = $("#start_time").val()
+                let rec_pattern = "single"
+
+                $.post("/appointments/new",{
+                  appointment_header: appointment_header,
+                  appointment_description: appointment_description,
+                  length: length,
+                  location: location,
+                  start_date: start_date,
+                  start_time: start_time,
+                  rec_pattern: rec_pattern
+                }).done(function(data){
+                  $('#exampleModalLong').modal('hide');
+                })
+            }
+          }
+          </script>
+
+
+    </div>
+
+    </div>
+
+    <!-- Modal -->
+    <div class="modal fade" id="takeModal" style="padding-top:100px;" tabindex="-1" role="dialog" aria-labelledby="takeModalTitle" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="takeModalTitle">Randevu Al</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            Randevu veren kişinin takvimi bu modalda görüntülenir.
+            
+            <form>
+              <div class="form-group">
+                <label for="aciklama">Randevu Hakkında Kısa Açıklama:</label>
+                <input type="text" class="form-control" id="aciklama" placeholder="Randevu hakkında açıklamanız">
+              </div>
+              <div class="form-group">
+                <div class="custom-file">
+                    <input type="file" class=" form-control custom-file-input" id="inputGroupFile02">
+                    <label class=" form-control custom-file-label" for="inputGroupFile02">Ek halinde dosya yükleyin</label>
+                  </div>
+                </div>
+            </form>
+          </div>
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary " data-dismiss="modal">İptal</button>
+            <div id="takeAppointment" type="button" class="btn btn-primary btn-block">Onayla</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+
+    <script>
+      moment.locale('tr');
+      // Başlangıçta gizle
+      $('#tableContainer').hide();
+      $('#hostVsGuest').hide();
+
+        function search(){
+            let searchQuery = $('#SearchInput').val();
+            $.getJSON("/user/search/"+searchQuery,function(data){
+              let msg ="";
+              if(data.length >0 ){
+                msg = "<b>\""+searchQuery +"\"</b> için bulunan sonuçlar:"
+                $('#tableContainer').show()
+              }
+              else{
+                msg = "Hiç bir sonuç bulunamadı. Farklı kelimelerle tekrar armayı deneyin!"
+                $('#tableContainer').hide()
+              }
+              
+              $('#error_msg').html(msg)
+              $('#error_msg').show();
+              updateTable(data);
+
+            })
+        }
+
+        function updateTable(data){
+          $('#hostVsGuest').hide();
+          let tableContents ="";
+          data.forEach(element => {
+            if(moment(element.StartDateTime).isValid() && !moment().isAfter(moment(element.StartDateTime))){
+              tableContents += 
+              "<tr ><td>" + element.username +"</td>"
+              +'<td><button class="btn btn-success btn-block" onclick="lookup('+element.id +')"><span class="fas fa-search "></span> Gözat</button></td>'   
+
+
+            }
+          });
+
+           $('#tableContent').html(tableContents);
+        }
+        
+        function lookup(userID){
+          $('#tableContainer').hide();
+          $('#hostVsGuest').show();
+          takvim(userID);
+        }
+        
+      function takvim(hostID){
+        var takvimObjesi =       {
+          header: {
+            left: 'prev,next today',
+            center: 'title',
+            right: 'month,basicWeek,basicDay'
+          },
+          locale:'TR',
+          themeSystem:'bootstrap3',
+          selectable:'true',
+          dayClick:function(date){
+            if(!moment().isAfter(moment(date))){
+              $('#exampleModalLong').modal('toggle');
+              give(date);
+            }
+          },
+          eventClick: function(event) {
+            if (event.click) {
+              take(event.click);
+              return false;
+            }
+          },
+          defaultDate: moment(),
+          navLinks: true, // can click day/week names to navigate views
+          editable: false,
+          eventLimit: true, // allow "more" link when too many events
+          events: [],
+          eventColor: '#378006',
+          eventTextColor: 'white'
+        }
+        $.ajax(
+              {
+                  url:"/appointments/my/host/",
+                  success: function(result){
+                      all_results = result
+                  }
+              }
+          ).done(function(){
+            for(var i=0;i<all_results.length;i++){
+              takvimObjesi.events.push({
+                title: all_results[i].AppointmentHeader,
+                start: moment(all_results[i].StartDateTime),
+                end: moment(all_results[i].StartDateTime).add(all_results[i].Length,'m'),
+                color: 'purple',
+                url: "/user/appointments/detail/"+all_results[i].AppointmentID
+              })
+              }
+          })
+          $.ajax(
+              {
+                  url:"/appointments/my/guest/",
+                  success: function(result2){
+                      all_results2 = result2
+                  }
+              }
+          ).done(function(){
+            for(var i=0;i<all_results2.length;i++){
+              takvimObjesi.events.push({
+                title: all_results2[i].AppointmentHeader,
+                start: moment(all_results2[i].StartDateTime),
+                end: moment(all_results2[i].StartDateTime).add(all_results2[i].Length,'m'),
+                color: 'blue',
+                url: "/user/appointments/detail/"+all_results2[i].AppointmentID
+              })
+              }
+          })
+          $.ajax(
+              {
+                  url:"/appointments/host/"+hostID,
+                  success: function(result3){
+                      all_results3 = result3
+                  }
+              }
+          ).done(function(){
+            for(var i=0;i<all_results3.length;i++){
+              if(all_results3[i].GuestID == null){
+                // Randevu boş ise
+                takvimObjesi.events.push({
+                title: all_results3[i].AppointmentHeader,
+                start: moment(all_results3[i].StartDateTime),
+                end: moment(all_results3[i].StartDateTime).add(all_results3[i].Length,'m'),
+                color: 'green',
+                click : all_results3[i].AppointmentID
+              })
+              }
+              
+              }
+              
+              $('#calendar').fullCalendar(takvimObjesi);
+          })
+      }
+      function take(appID){
+            $('#takeModal').modal('toggle');
+            
+            document.getElementById('takeAppointment').onclick = function(){
+              let desc = $('#aciklama').val();
+              console.log("Yolla",desc)
+              $.post( '/appointments/take', { AppointmentID : appID })
+              .done(function( data ) {
+                if(data.code == "200"){
+                  $('#takeModal').modal('hide');
+                }else if(data.code == "201"){
+                  alert("Bu randevu alınamıyor. Lütfen farklı bir randevuyu deneyin!");
+                }
+              });
+            }
+
+        }
+    
+
+
+    </script>
+</body>
+</html>

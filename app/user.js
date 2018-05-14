@@ -27,6 +27,22 @@ router.get("/calendar",function (req,res) {
     })
 
 })
+router.get("/search",function (req,res) {
+    res.render("user_search.ejs",{
+        user : getSecureUserInfo(req.user)
+    })
+
+})
+
+router.get("/search/:query", function(req,res){
+    let query = req.params.query
+    let user_id = req.user.id
+  
+      db.query("select * from users where username LIKE CONCAT('%',?, '%') AND id != ?", [query,user_id], function(err,result) {
+              if(err) throw err;
+              res.status(200).send(result);
+      })
+  })
 
 router.get('/appointments/detail/:appointment_id',isLoggedIn,function(req,res){
     let appointment_id =req.params.appointment_id;
