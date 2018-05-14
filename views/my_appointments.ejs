@@ -15,7 +15,11 @@
                     console.log(all_results)
                 }
             }
-        )
+        ).done(function(){
+            document.getElementById("iptal").onclick = function(){
+                $('#exampleModalLong').modal('toggle');
+            }
+        })
         
         function fillTable(results){
             //TODO: Abi buraya jquery ile tablo doldurma ozelligi yazilacak
@@ -29,13 +33,14 @@
                         "<td>"+results[i].username+"</td>"+
                         "<td>"+moment(results[i].StartDateTime).fromNow()+"</td>"+
                         "<td>"+results[i].Location+"</td>"+
-                        '<td><a href="/user/appointments/detail/'+results[i].AppointmentID+'"style="width:45%;margin-left:5%;" class="btn btn-info">Detay</a><a style="width:45%;margin-left:5%;" class="btn btn-danger";>İptal</a></td>'+
+                        '<td><a href="/user/appointments/detail/'+results[i].AppointmentID+'"style="width:45%;margin-left:5%;" class="btn btn-info">Detay</a><button id="iptal" style="width:45%;margin-left:5%;" class="btn btn-danger";>İptal</button></td>'+
                         "</tr>"
 
                     )
                 }
             }
         }
+
     }
 </script>
 <table id="my_appointments" class="table table-striped">
@@ -52,3 +57,24 @@
     </tbody>
 </table>
 <button class="btn btn-block btn-success" id="yenile" onclick="getDatasFromServer()">Yenile</button>
+<div class="modal fade" id="exampleModalLong" style="padding-top:100px;" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+          <div class="modal-content">
+            <div class="modal-header">
+              <h3 class="modal-title" id="exampleModalLongTitle">Randevu Iptali</h3>
+              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+            <div class="modal-body">
+                <div class="well">
+                    <h4>Randevuyu iptal etmek istiyor musunuz ?</h4>
+                </div>            
+            </div>
+            <div class="modal-footer">
+              <button type="button" class="btn btn-danger " data-dismiss="modal">İptal</button>
+              <button id="kesinIptal" type="button" class="btn btn-success btn-block">Onayla</button>
+            </div>
+          </div>
+        </div>
+      </div>
