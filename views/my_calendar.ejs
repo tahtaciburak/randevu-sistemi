@@ -27,8 +27,10 @@
         themeSystem:'bootstrap3',
         selectable:'true',
         dayClick:function(date){
-          $('#exampleModalLong').modal('toggle');
-          give(date);
+          if(!moment().isAfter(moment(date))){
+            $('#exampleModalLong').modal('toggle');
+            give(date);
+          }
         },
         defaultDate: moment(),
         navLinks: true, // can click day/week names to navigate views
