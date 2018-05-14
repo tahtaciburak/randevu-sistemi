@@ -160,13 +160,14 @@ router.post("/new",function (req,res) {
 	var reccurrency = req.body.reccurrency
 	var location = req.body.location
 	var rec_pattern = req.body.rec_pattern
-
+  console.log("selamunaleykumbeyler")
 	console.log(start_date+start_time)
 
     if(rec_pattern=="single"){
 		//TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
 		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,1)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
 			if (err) {
+        throw err
 				res.json({code:400,message:err})
 			}else{
 				res.redirect("/user")
