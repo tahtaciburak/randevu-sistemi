@@ -2,28 +2,53 @@
 <!doctype html>
 <html>
     <% include ./header %>
+    <script type="text/javascript" src="http://momentjs.com/downloads/moment-with-locales.min.js"></script>    
     <script>
+        moment.locale('tr')
         $.post("/appointments/getAppointmentInformation",{
             AppointmentID: <%= a %>
         }).done(function(data){
-            console.log(data)
             $('#id-area').html("<span>"+data[0].AppointmentID+"</span>")
             $('#header-area').html("<span>"+data[0].AppointmentHeader+"</span>")
-            $('#date-area').html("<span>"+data[0].StartDateTime+"</span>")
+            $('#date-area').html("<span>"+moment(data[0].StartDateTime).format('lll')+"</span>")
             $('#host-area').html("<span>"+data[0].HostID+"</span>")
             $('#guest-area').html("<span>"+data[0].GuestID+"</span>")
             $('#desc-area').html("<span>"+data[0].AppointmentDescription+"</span>")
             $('#location-area').html("<span>"+data[0].Location+"</span>")
-            getRelationsBetweenUsers(data.HostID,data.GuestID)
+            getRelationsBetweenUsers(data[0].HostID,data[0].GuestID)
 
         })
 
         function getRelationsBetweenUsers(host,guest){
+            console.log(host)
+            console.log(guest)
             $.post("/appointments/getRelations",{
                 host_id :host,
                 guest_id : guest    
             }).done(function(relationsData){
                 console.log(relationsData)
+                for(i=0;i<relationsData.length;i++){
+                    status ='<span class="label label-default">Bekliyor</span>'
+                    if(moment().isAfter(moment(relationsData[i].StartDateTime))){
+                        status ='<span class="label label-warning">Bitti</span>'
+                    }else{
+                        if(relationsData[i].AppointmentStatus=="3"){
+                            status ='<span class="label label-danger">Iptal Edildi</span>'
+                        }else if(relationsData[i].AppointmentStatus=="2"){
+                            status ='<span class="label label-success">Alindi</span>'
+                        }else{
+                            status ='<span class="label label-default">Bekliyor</span>'
+                        }
+                    }
+                    $("#relation_list").append(
+                        '<tr class="item">'+"<td>"+relationsData[i].AppointmentHeader+"</td>"+
+                        "<td>"+moment(relationsData[i].StartDateTime).fromNow()+"</td>"+
+                        "<td>"+relationsData[i].Location+"</td>"+
+                        '<td>'+status+'</td>'+
+                        "</tr>"
+
+                    )
+                }
             })
         }
 
@@ -31,35 +56,35 @@
     <body>
         <div class="container">
             <legend>Randevu Bilgileri</legend>
-            <div class="well">
+            <div style="padding:50px;" class="well">
                 <div class="row">
                     <h5><strong>Randevu ID:</strong></h5>
                     <h5 id="id-area"></h5>
-                 </div>
-            <div class="row">
-                <h5><strong>Randevu Başlığı:</strong></h5>
-                <h5 id="header-area"></h5>
-            </div>
-            <div class="row">
-                <h5><strong>Randevu Tarihi: </strong></h5>
-                <h5 id="date-area"></h5>
-            </div>
-            <div class="row">
-                <h5><strong>Lokasyon: </strong></h5>
-                <h5 id="location-area"></h5>
-            </div>
-            <div class="row">
-                <h5><strong>Ev Sahibi Kişi:</strong></h5>
-                <h5 id="host-area"></h5>
-            </div>
-            <div class="row">
-                    <h5><strong>Misafir Kişi: </strong></h5>
-                    <h5 id="guest-area"></h5>
                 </div>
-            <div class="row">
-                <h5><strong>Randevu Açıklaması: </strong></h5>
-                <h5 id="desc-area"></h5>
-            </div>
+                <div class="row">
+                    <h5><strong>Randevu Başlığı:</strong></h5>
+                    <h5 id="header-area"></h5>
+                </div>
+                <div class="row">
+                    <h5><strong>Randevu Tarihi: </strong></h5>
+                    <h5 id="date-area"></h5>
+                </div>
+                <div class="row">
+                    <h5><strong>Lokasyon: </strong></h5>
+                    <h5 id="location-area"></h5>
+                </div>
+                <div class="row">
+                    <h5><strong>Ev Sahibi Kişi:</strong></h5>
+                    <h5 id="host-area"></h5>
+                </div>
+                <div class="row">
+                        <h5><strong>Misafir Kişi: </strong></h5>
+                        <h5 id="guest-area"></h5>
+                    </div>
+                <div class="row">
+                    <h5><strong>Randevu Açıklaması: </strong></h5>
+                    <h5 id="desc-area"></h5>
+                </div>
             </div>
         </div>
         <div class="container">
@@ -74,7 +99,7 @@
                             <th><b>Sonuc</b></th>
                         </tr>
                     </thead>
-                    <tbody id="appointment_list">
+                    <tbody id="relation_list">
                     </tbody>
                 </table>
                 </div>

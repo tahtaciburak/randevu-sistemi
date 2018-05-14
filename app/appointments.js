@@ -145,7 +145,6 @@ router.post("/getAppointmentInformation", function(req, res) {
         if(err){
           res.json({code:400, message:err})
         }else{
-          console.log(result)
           res.json(result)
         }
     })
@@ -154,12 +153,15 @@ router.post("/getAppointmentInformation", function(req, res) {
 router.post("/getRelations",function(req,res){
   let host_id = req.body.host_id
   let guest_id = req.body.guest_id
+  console.log(host_id)
+  console.log(guest_id)
 
-  db.query("SELECT * FROM Appointments WHERE GuestID = ? AND HostID = ?",[host_id,guest_id],function(err,result){
+  db.query("SELECT * FROM Appointments WHERE GuestID = ? AND HostID = ?",[guest_id,host_id],function(err,result){
     if(err){
       throw err
       res.json({code:400,msg: "something went wrong"})
     }else{
+      console.log(result)
       res.json(result)
     }
   })
