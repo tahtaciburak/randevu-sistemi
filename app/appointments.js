@@ -3,6 +3,7 @@ var express = require("express")
 var router = express.Router()
 var db = require("../config/db.js")
 var crypto = require("crypto")
+var moment = require("moment")
 
 router.get("/",isLoggedIn,function (req,res) {
     res.render("create_channel.ejs")
@@ -177,29 +178,43 @@ router.post("/new",function (req,res) {
 	var reccurrency = req.body.reccurrency
 	var location = req.body.location
 	var rec_pattern = req.body.rec_pattern
-  console.log("selamunaleykumbeyler")
-	console.log(start_date+start_time)
-
-    if(rec_pattern=="single"){
-		//TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
-		db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,1)",[host_id,appointment_header,appointment_description,length,location,start_date+" "+start_time],function (err,result) {
-			if (err) {
-        throw err
-				res.json({code:400,message:err})
-			}else{
-				res.redirect("/user")
-			}
-		})
-    }else if(rec_pattern=="weekly"){
-		for(var i=0;i<reccurrency;i++){
-
-		}
-    }else if(rec_pattern=="monthly"){
-		//TODO momentjs ile gun gun ekleme yapilabilir bence bu kismi yaparken momentjs i derinlemesine arastir
-		for(var i=0;i<reccurrency;i++){
-
-		}
-	}
+  
+  let full_date = start_date+" "+start_time
+  if(rec_pattern=="single"){
+  //TODO istenen aralik bos mu dolu mu bunun kontrolu yapilmali
+  db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,1)",[host_id,appointment_header,appointment_description,length,location,full_date],function (err,result) {
+    if (err) {
+      throw err
+      res.json({code:400,message:err})
+    }else{
+      res.redirect("/user")
+    }
+  })
+  }else if(rec_pattern=="weekly"){
+    for(var i=0;i<reccurrency;i++){
+      db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,1)",[host_id,appointment_header,appointment_description,length,location,full_date],function (err,result) {
+        if (err) {
+          throw err
+          res.json({code:400,message:err})
+        }else{
+        }
+      })
+      full_date = moment(moment(full_date).add(1,"week")).format("")
+    }
+    res.redirect("/user")
+  }else if(rec_pattern=="monthly"){
+    for(var i=0;i<reccurrency;i++){
+      db.query("INSERT INTO Appointments (HostID,AppointmentHeader,AppointmentDescription,Length,Location,StartDateTime,AppointmentStatus) VALUES(?,?,?,?,?,?,1)",[host_id,appointment_header,appointment_description,length,location,full_date],function (err,result) {
+        if (err) {
+          throw err
+          res.json({code:400,message:err})
+        }else{
+        }
+      })
+      full_date = moment(moment(full_date).add(1,"month")).format("")
+    }
+    res.redirect("/user")
+}
 })
 
 function isLoggedIn(req, res, next) {
