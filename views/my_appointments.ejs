@@ -4,7 +4,16 @@
     $(document).ready(function(){
         getDatasFromServer();
     })
-
+    function deleteAppointment(AppointmentID){
+            $('#exampleModalLong').modal('toggle');
+            $('#kesinIptal').click(function(){
+                    $.post('/appointments/cancel/'+AppointmentID,function(data){
+                        alert("Silme İşlemi Başarılı");
+                        $('#exampleModalLong').modal('hide');
+                        getDatasFromServer();
+                    })
+                })
+        }
     function getDatasFromServer(){
         $.ajax(
             {
@@ -15,33 +24,41 @@
                     console.log(all_results)
                 }
             }
-        ).done(function(){
-            document.getElementById("iptal").onclick = function(){
-                $('#exampleModalLong').modal('toggle');
-            }
-        })
-        
-        function fillTable(results){
+        )
+
+    }
+    function fillTable(results){
             //TODO: Abi buraya jquery ile tablo doldurma ozelligi yazilacak
             $(".item").remove()
             moment.locale('tr');
             console.log(results)
             for(var i=0;i<results.length;i++){
                 if(moment(results[i].StartDateTime).isValid() && !moment().isAfter(moment(results[i].StartDateTime))){
-                    $("#appointment_list").append(
+                    if(results[i].AppointmentStatus == 3){
+                        $("#appointment_list").append(
                         '<tr class="item">'+"<td>"+results[i].AppointmentHeader+"</td>"+
                         "<td>"+results[i].username+"</td>"+
                         "<td>"+moment(results[i].StartDateTime).fromNow()+"</td>"+
                         "<td>"+results[i].Location+"</td>"+
-                        '<td><a href="/user/appointments/detail/'+results[i].AppointmentID+'"style="width:45%;margin-left:5%;" class="btn btn-info">Detay</a><button id="iptal" style="width:45%;margin-left:5%;" class="btn btn-danger";>İptal</button></td>'+
+                        '<td><a href="/user/appointments/detail/'+results[i].AppointmentID+'"style="width:45%;margin-left:5%;" class="btn btn-info">Detay</a>'+
+                        '<div id="iptal" style="width:45%;margin-left:5%;cursor:not-allowed" class="btn btn-warning";>Randevu İptal Edilmiş</div></td>'+
                         "</tr>"
 
                     )
+                    }else{
+                        $("#appointment_list").append(
+                        '<tr class="item">'+"<td>"+results[i].AppointmentHeader+"</td>"+
+                        "<td>"+results[i].username+"</td>"+
+                        "<td>"+moment(results[i].StartDateTime).fromNow()+"</td>"+
+                        "<td>"+results[i].Location+"</td>"+
+                        '<td><a href="/user/appointments/detail/'+results[i].AppointmentID+'"style="width:45%;margin-left:5%;" class="btn btn-info">Detay</a>'+
+                        '<div id="iptal" style="width:45%;margin-left:5%;" onclick="deleteAppointment('+results[i].AppointmentID+')" class="btn btn-danger";>İptal</div></td>'+
+                        "</tr>"
+                    )
+                    }
                 }
             }
         }
-
-    }
 </script>
 <table id="my_appointments" class="table table-striped">
     <thead>

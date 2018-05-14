@@ -117,9 +117,8 @@ router.get("/search/:query", function(req,res){
 	})
 })
 
-router.post("/cancel", function(req,res){
-  var appointment_ID = req.body.AppointmentID
-
+router.get("/cancel/:AppointmentID", function(req,res){
+  var appointment_ID = req.params.AppointmentID
   db.query("update Appointments set AppointmentStatus = 3 where AppointmentID = ? ", [appointment_ID], function(err,result) {
         if(err){
           res.json({code:400, message:err})
