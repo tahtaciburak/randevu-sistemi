@@ -28,6 +28,7 @@
         selectable:'true',
         dayClick:function(date){
           $('#exampleModalLong').modal('toggle');
+          give(date);
         },
         defaultDate: moment(),
         navLinks: true, // can click day/week names to navigate views
@@ -110,15 +111,19 @@
             <form>
               <div class="form-group">
                 <label for="baslik">Randevu Başlığı:</label>
-                <input type="text" class="form-control" id="baslik" placeholder="Randevu hakkında açıklamanız">
+                <input type="text" class="form-control" id="baslik" placeholder="Proje Görüşmesi">
+              </div>
+              <div class="form-group">
+                  <label for="start_time">Randevu Başlangıç Saati</label>
+                  <input type="time" class="form-control" id="start_time" name="start_time">
               </div>
               <div class="form-group">
                 <label for="sure">Randevu Süresi:</label>
-                <input type="text" class="form-control" id="sure" placeholder="Randevu hakkında açıklamanız">
+                <input type="text" class="form-control" id="sure" placeholder="30">
               </div>
               <div class="form-group">
                 <label for="lokasyon">Randevu Lokasyonu:</label>
-                <input type="text" class="form-control" id="lokasyon" placeholder="Randevu hakkında açıklamanız">
+                <input type="text" class="form-control" id="lokasyon" placeholder="DB-12 Amfisi YTÜ">
               </div>
               <div class="form-group">
                 <label for="aciklama">Randevu Açıklaması:</label>
@@ -128,11 +133,37 @@
           </div>
           <div class="modal-footer">
             <button type="button" class="btn btn-danger " data-dismiss="modal">İptal</button>
-            <button id="takeAppointment" type="button" class="btn btn-success btn-block">Onayla</button>
+            <button id="giveAppointment" type="button" class="btn btn-success btn-block">Onayla</button>
           </div>
         </div>
       </div>
     </div>
+    <script>
+      function give(date){
+        console.log(moment(date).format(''))
 
+        document.getElementById("giveAppointment").onclick = function(){
+          let appointment_header = $("#baslik").val()
+          let length = $("#sure").val()
+          let location = $("#lokasyon").val()
+          let appointment_description = $("#aciklama").val()
+          let start_date = moment(date).format('')
+          let start_time = $("#start_time").val()
+          let rec_pattern = "single"
+
+          $.post("/appointments/new",{
+            appointment_header: appointment_header,
+            appointment_description: appointment_description,
+            length: length,
+            location: location,
+            start_date: start_date,
+            start_time: start_time,
+            rec_pattern: rec_pattern
+          }).done(function(data){
+            $('#exampleModalLong').modal('hide');
+          })
+      }
+    }
+    </script>
 </body>
 </html>
