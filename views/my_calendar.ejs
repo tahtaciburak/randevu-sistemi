@@ -34,7 +34,7 @@
         },
         defaultDate: moment(),
         navLinks: true, // can click day/week names to navigate views
-        editable: true,
+        editable: false,
         eventLimit: true, // allow "more" link when too many events
         events: [],
         eventColor: '#378006',
@@ -53,7 +53,8 @@
               title: all_results[i].AppointmentHeader,
               start: moment(all_results[i].StartDateTime),
               end: moment(all_results[i].StartDateTime).add(all_results[i].Length,'m'),
-              color: 'purple'
+              color: 'purple',
+              url: "user/appointments/detail/"+all_results[i].AppointmentID
              })
             }
         })
@@ -70,7 +71,8 @@
               title: all_results2[i].AppointmentHeader,
               start: moment(all_results2[i].StartDateTime),
               end: moment(all_results2[i].StartDateTime).add(all_results2[i].Length,'m'),
-              color: 'red'
+              color: 'red',
+              url: "user/appointments/detail/"+all_results2[i].AppointmentID
              })
             }
             console.log(all_results2)
